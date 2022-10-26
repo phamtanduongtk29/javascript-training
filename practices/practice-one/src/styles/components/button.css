@@ -1,0 +1,25 @@
+.btn {
+  color: var(--secondary-color);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+}
+
+.btn-default {
+  background-color: var(--fourth-color);
+}
+
+.btn-third {
+  background-color: var(--fifth-color);
+}

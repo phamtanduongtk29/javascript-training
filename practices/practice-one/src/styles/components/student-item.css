@@ -1,0 +1,29 @@
+.student-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 0px 0.2mm #ccc;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.student-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px 1px #ccc;
+}
+
+.student-item-image {
+  --a: 100px;
+  width: var(--a);
+  height: var(--a);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.student-item-name {
+  padding: 10px 0 0;
+}
