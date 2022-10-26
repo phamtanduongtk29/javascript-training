@@ -1,0 +1,13 @@
+/* Base */
+@import url(./reset.css);
+@import url(./fonts.css);
+@import url(./variables.css);
+
+/* Common styles */
+@import url(./common/index.css);
+
+/* Component styles */
+@import url(./components/index.css);
+
+/* Section styles */
+@import url(./sections/index.css);
