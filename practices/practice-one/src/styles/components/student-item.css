@@ -16,9 +16,8 @@
 }
 
 .student-item-image {
-  --a: 100px;
-  width: var(--a);
-  height: var(--a);
+  width: var(--100);
+  height: var(--100);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
