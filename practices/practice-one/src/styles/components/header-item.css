@@ -1,0 +1,18 @@
+.header-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-item > span {
+  font-size: 35px;
+  text-transform: capitalize;
+  padding: 0 20px;
+}
+
+.header-item-logo {
+  font-size: 45px;
+  color: black;
+  display: flex;
+  align-items: center;
+}

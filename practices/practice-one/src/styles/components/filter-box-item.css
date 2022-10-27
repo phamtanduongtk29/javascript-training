@@ -1,0 +1,41 @@
+.filter-box-item:first-child {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.filter-search {
+  flex: 1;
+  font-size: 15px;
+  border: none;
+}
+
+.filter-box-item:first-child .btn {
+  padding: 10px 15px;
+  cursor: pointer;
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.filter-box-item:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-box-item:last-child .btn {
+  font-weight: 700;
+  padding: 10px 20px;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.filter-box-item:first-child .btn:hover,
+.filter-box-item:last-child .btn:hover {
+  opacity: 0.8;
+}
