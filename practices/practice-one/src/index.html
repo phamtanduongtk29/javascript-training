@@ -1,218 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./styles/main.css" />
-    <title>Document</title>
-    <style></style>
-  </head>
-  <body>
-    <div id="root">
-      <header class="header-wrapper container">
-        <p class="header-item">
-          <span>Student </span>
-          <a href="/" class="header-item-logo"
-            ><ion-icon name="book-sharp"></ion-icon
-          ></a>
-          <span>Manager</span>
-        </p>
-      </header>
-      <section class="container filter-box">
-        <div class="filter-box-item">
-          <input
-            type="text"
-            placeholder="Enter name or code Student..."
-            class="filter-search"
-          />
-          <button class="btn btn-default" id="search-btn">
-            <ion-icon name="search-outline"></ion-icon>
-          </button>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./styles/main.css" />
+        <title>Document</title>
+        <style></style>
+    </head>
+    <body>
+        <div id="root">
+            <header class="header-wrapper container">
+                <p class="header-item">
+                    <span>Student </span>
+                    <a href="/" class="header-item-logo"
+                        ><ion-icon name="book-sharp"></ion-icon
+                    ></a>
+                    <span>Manager</span>
+                </p>
+            </header>
+            <section class="container filter-box">
+                <div class="filter-box-item">
+                    <input
+                        type="text"
+                        placeholder="Enter name or code Student..."
+                        class="filter-search"
+                    />
+                    <button class="btn btn-default" id="search-btn">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </button>
+                </div>
+                <div class="filter-box-item">
+                    <button class="btn btn-primary" id="add-btn">
+                        new student
+                    </button>
+                </div>
+            </section>
+            <section class="student-wrapper container">
+                <ul class="students">
+                    <li class="student-item">
+                        <div
+                            class="student-item-image"
+                            style="
+                                background-image: url(./assets/images/student.jpg);
+                            "
+                        ></div>
+                        <p class="student-item-name">pham tan duong</p>
+                    </li>
+                    <li class="student-item">
+                        <div
+                            class="student-item-image"
+                            style="
+                                background-image: url(./assets/images/student.jpg);
+                            "
+                        ></div>
+                        <p class="student-item-name">pham tan duong</p>
+                    </li>
+                    <li class="student-item">
+                        <div
+                            class="student-item-image"
+                            style="
+                                background-image: url(./assets/images/student.jpg);
+                            "
+                        ></div>
+                        <p class="student-item-name">pham tan duong</p>
+                    </li>
+                    <li class="student-item">
+                        <div
+                            class="student-item-image"
+                            style="
+                                background-image: url(./assets/images/student.jpg);
+                            "
+                        ></div>
+                        <p class="student-item-name">pham tan duong</p>
+                    </li>
+                    <li class="student-item">
+                        <div
+                            class="student-item-image"
+                            style="
+                                background-image: url(./assets/images/student.jpg);
+                            "
+                        ></div>
+                        <p class="student-item-name">pham tan duong</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="overlay" style="display: flex">
+                <section
+                    class="form-add-wrapper container"
+                    style="display: flex"
+                >
+                    <div class="icon-item">
+                        <ion-icon name="close-outline"></ion-icon>
+                    </div>
+                    <ul class="form-add">
+                        <li class="form-add-item" message="">
+                            <label for="name">name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                id="name"
+                                placeholder="Enter name..."
+                            />
+                        </li>
+                        <li class="form-add-item" message="">
+                            <label for="date-of-birth">date of birth</label>
+                            <input
+                                type="date"
+                                name="dateOfBirth"
+                                id="date-of-birth"
+                            />
+                        </li>
+                        <li class="form-add-item" message="">
+                            <label for="gender">gender</label>
+                            <select name="gender" id="gender">
+                                <option value="male">male</option>
+                                <option value="female">flemale</option>
+                                <option value="other">other</option>
+                            </select>
+                        </li>
+                        <li class="form-add-item" message="">
+                            <label for="code">code</label>
+                            <input
+                                type="text"
+                                name="code"
+                                id="code"
+                                placeholder="Enter code..."
+                            />
+                        </li>
+                        <li class="form-add-item" message="">
+                            <label for="class-code">class code</label>
+                            <select name="classCode" id="class-code">
+                                <option value="19-0101">cntt1</option>
+                                <option value="19-0202">cntt2</option>
+                                <option value="19-0303">cnttd</option>
+                            </select>
+                        </li>
+                        <li class="form-add-item" message="">
+                            <label for=""></label>
+                            <label for="image">select image</label>
+                            <input
+                                type="file"
+                                name="image"
+                                id="image"
+                                accept="image/png, image/jpeg"
+                                hidden
+                            />
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary">submit</button>
+                </section>
+                <section class="form-update-wrapper">
+                    <div class="icon-item">
+                        <ion-icon name="close-outline"></ion-icon>
+                    </div>
+                    <section class="form-update">
+                        <div class="form-update-image">
+                            <img src="./assets/images/student.jpg" alt="" />
+                        </div>
+                        <ul class="informations">
+                            <li class="information-item">
+                                <label for="">code</label>
+                                <div class="information-item-update">
+                                    <input
+                                        type="text"
+                                        value="1231233"
+                                        disabled
+                                        id="update-code"
+                                    />
+                                    <ion-icon name="pencil-outline"></ion-icon>
+                                </div>
+                            </li>
+                            <li class="information-item">
+                                <label for="">name</label>
+                                <div class="information-item-update">
+                                    <input
+                                        type="text"
+                                        value="pham tan duong"
+                                        disabled
+                                        id="update-name"
+                                    />
+                                    <ion-icon name="pencil-outline"></ion-icon>
+                                </div>
+                            </li>
+                            <li class="information-item">
+                                <label for="">date of brith</label>
+                                <div class="information-item-update">
+                                    <input
+                                        type="date"
+                                        name="dateOfBirht"
+                                        id="update-date-of-birth"
+                                    />
+                                    <ion-icon name="pencil-outline"></ion-icon>
+                                </div>
+                            </li>
+                            <li class="information-item">
+                                <label for="">class code</label>
+                                <div class="information-item-update">
+                                    <select
+                                        name="classCode"
+                                        id="update-class-code"
+                                    >
+                                        <option value="19-0101">cntt1</option>
+                                        <option value="19-0202">cntt2</option>
+                                        <option value="19-0303">cnttd</option>
+                                    </select>
+                                    <ion-icon name="pencil-outline"></ion-icon>
+                                </div>
+                            </li>
+                            <li class="information-item">
+                                <label for="">gender</label>
+                                <div class="information-item-update">
+                                    <select name="gender" id="update-gender">
+                                        <option value="male">male</option>
+                                        <option value="female">flemale</option>
+                                        <option value="other">other</option>
+                                    </select>
+                                    <ion-icon name="pencil-outline"></ion-icon>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="buttons">
+                            <button id="update" class="btn btn-primary">
+                                update
+                            </button>
+                            <button id="delete" class="btn btn-third">
+                                delete
+                            </button>
+                        </div>
+                    </section>
+                </section>
+            </section>
         </div>
-        <div class="filter-box-item">
-          <button class="btn btn-primary" id="add-btn">new student</button>
-        </div>
-      </section>
-      <section class="student-wrapper container">
-        <ul class="students">
-          <li class="student-item">
-            <div
-              class="student-item-image"
-              style="background-image: url(./assets/images/student.jpg)"
-            ></div>
-            <p class="student-item-name">pham tan duong</p>
-          </li>
-          <li class="student-item">
-            <div
-              class="student-item-image"
-              style="background-image: url(./assets/images/student.jpg)"
-            ></div>
-            <p class="student-item-name">pham tan duong</p>
-          </li>
-          <li class="student-item">
-            <div
-              class="student-item-image"
-              style="background-image: url(./assets/images/student.jpg)"
-            ></div>
-            <p class="student-item-name">pham tan duong</p>
-          </li>
-          <li class="student-item">
-            <div
-              class="student-item-image"
-              style="background-image: url(./assets/images/student.jpg)"
-            ></div>
-            <p class="student-item-name">pham tan duong</p>
-          </li>
-          <li class="student-item">
-            <div
-              class="student-item-image"
-              style="background-image: url(./assets/images/student.jpg)"
-            ></div>
-            <p class="student-item-name">pham tan duong</p>
-          </li>
-        </ul>
-      </section>
-      <section class="overlay">
-        <section class="form-add-wrapper container">
-          <div class="icon-item">
-            <ion-icon name="close-outline"></ion-icon>
-          </div>
-          <ul class="form-add">
-            <li class="form-add-item" message="">
-              <label for="name">name</label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Enter name..."
-              />
-            </li>
-            <li class="form-add-item" message="">
-              <label for="date-of-birht">date of birth</label>
-              <input type="date" name="dateOfBirht" id="date-of-birht" />
-            </li>
-            <li class="form-add-item" message="">
-              <label for="gender">gender</label>
-              <select name="gender" id="gender">
-                <option value="male">male</option>
-                <option value="female">flemale</option>
-                <option value="other">other</option>
-              </select>
-            </li>
-            <li class="form-add-item" message="">
-              <label for="code">code</label>
-              <input
-                type="text"
-                name="code"
-                id="code"
-                placeholder="Enter code..."
-              />
-            </li>
-            <li class="form-add-item" message="">
-              <label for="class-code">class code</label>
-              <select name="classCode" id="class-code">
-                <option value="19-0101">cntt1</option>
-                <option value="19-0202">cntt2</option>
-                <option value="19-0303">cnttd</option>
-              </select>
-            </li>
-            <li class="form-add-item" message="">
-              <label for=""></label>
-              <label for="image">select image</label>
-              <input
-                type="file"
-                name="image"
-                id="image"
-                accept="image/png, image/jpeg"
-                hidden
-              />
-            </li>
-          </ul>
-          <button class="btn btn-primary">submit</button>
-        </section>
-        <section class="form-update-wrapper">
-          <div class="icon-item">
-            <ion-icon name="close-outline"></ion-icon>
-          </div>
-          <section class="form-update">
-            <div class="form-update-image">
-              <img src="./assets/images/student.jpg" alt="" />
-            </div>
-            <ul class="informations">
-              <li class="information-item">
-                <label for="">code</label>
-                <div class="information-item-update">
-                  <input
-                    type="text"
-                    value="1231233"
-                    disabled
-                    id="update-code"
-                  />
-                  <ion-icon name="pencil-outline"></ion-icon>
-                </div>
-              </li>
-              <li class="information-item">
-                <label for="">name</label>
-                <div class="information-item-update">
-                  <input
-                    type="text"
-                    value="pham tan duong"
-                    disabled
-                    id="update-name"
-                  />
-                  <ion-icon name="pencil-outline"></ion-icon>
-                </div>
-              </li>
-              <li class="information-item">
-                <label for="">date of brith</label>
-                <div class="information-item-update">
-                  <input
-                    type="date"
-                    name="dateOfBirht"
-                    id="update-date-of-birth"
-                  />
-                  <ion-icon name="pencil-outline"></ion-icon>
-                </div>
-              </li>
-              <li class="information-item">
-                <label for="">class code</label>
-                <div class="information-item-update">
-                  <select name="classCode" id="update-class-code">
-                    <option value="19-0101">cntt1</option>
-                    <option value="19-0202">cntt2</option>
-                    <option value="19-0303">cnttd</option>
-                  </select>
-                  <ion-icon name="pencil-outline"></ion-icon>
-                </div>
-              </li>
-              <li class="information-item">
-                <label for="">gender</label>
-                <div class="information-item-update">
-                  <select name="gender" id="update-gender">
-                    <option value="male">male</option>
-                    <option value="female">flemale</option>
-                    <option value="other">other</option>
-                  </select>
-                  <ion-icon name="pencil-outline"></ion-icon>
-                </div>
-              </li>
-            </ul>
-            <div class="buttons">
-              <button id="update" class="btn btn-primary">update</button>
-              <button id="delete" class="btn btn-third">delete</button>
-            </div>
-          </section>
-        </section>
-      </section>
-    </div>
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule
-      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
-    ></script>
-  </body>
+        <script
+            type="module"
+            src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+        ></script>
+        <script
+            nomodule
+            src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+        ></script>
+        <script src="./index.js" type="module"></script>
+    </body>
 </html>
