@@ -1,0 +1,22 @@
+{
+  "students": [
+    {
+      "code": "1223123",
+      "name": "duong",
+      "image": 1,
+      "gender": "male",
+      "dateOfBirth": "2022-10-11",
+      "classCode": "19-0101",
+      "id": 1
+    },
+    {
+      "code": "012312312",
+      "name": "order-server",
+      "image": 1,
+      "gender": "male",
+      "dateOfBirth": "2022-10-11",
+      "classCode": "19-0101",
+      "id": 2
+    }
+  ]
+}

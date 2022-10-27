@@ -81,18 +81,19 @@ export default class FilterView {
 
     async #handleSubmit(obj) {
         const result = await this.#controller.handleAdd(obj);
+        // remove all class error
         for (const [key, value] of Object.entries(obj)) {
             querySelector(`[name=${key}`).parentNode.classList.remove('error');
         }
-        if (!Object.keys(result).length) {
-            console.log('Them vao');
+        if (!result.isError) {
+            alert('Add successful');
+            this.#formAdd.style.display = 'none';
+            this.#overlay.style.display = 'none';
         } else {
-            for (const [key, value] of Object.entries(result)) {
-                querySelector(`[name=${key}`).parentNode.setAttribute(
-                    'message',
-                    value
-                );
-                querySelector(`[name=${key}`).parentNode.classList.add('error');
+            for (const [key, value] of Object.entries(result.error)) {
+                const element = querySelector(`[name=${key}`).parentNode;
+                element.setAttribute('message', value);
+                element.classList.add('error');
             }
         }
     }
