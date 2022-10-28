@@ -1,8 +1,11 @@
-import { querySelector } from '../index.js';
+import { querySelector, querySelectorAll } from '../index.js';
 
+import Controller from '../controllers/main-controllers.js';
 import Student from '../models/students.js';
 
 export default class FillterView {
+    #controller;
+
     #overlay;
     #formAdd;
 
@@ -18,6 +21,7 @@ export default class FillterView {
     #image;
 
     constructor() {
+        this.#controller = new Controller();
         this.#overlay = querySelector('.overlay');
         this.#formAdd = querySelector('.form-add-wrapper');
         this.#btnAdd = querySelector('#add-btn');
@@ -68,7 +72,41 @@ export default class FillterView {
         });
     }
 
-    #handleSubmit() {}
+    async #handleSubmit(student) {
+        const respone = await this.#controller.handleAddStudent(student);
+        switch (respone.type) {
+            case 'warning': {
+                const liElement = this.#code.parentElement;
+                liElement.setAttribute('message', respone.message);
+                liElement.classList.add('error');
+                break;
+            }
+            case 'require': {
+                // remove all error class
+                const liElement = querySelectorAll('.form-add-item');
+                liElement.forEach((item) => {
+                    item.classList.remove('error');
+                });
+
+                // apply error class
+                for (const [key, value] of Object.entries(respone.emptyField)) {
+                    const element = querySelector(
+                        `[name=${key}]`
+                    ).parentElement;
+                    element.setAttribute('message', value);
+                    element.classList.add('error');
+                }
+                break;
+            }
+            case 'success': {
+                console.log('success');
+                break;
+            }
+            default: {
+                console.log('looix');
+            }
+        }
+    }
 
     #submitForm() {
         this.#btnSubmit.addEventListener('click', (e) => {
@@ -80,6 +118,7 @@ export default class FillterView {
                 this.#classCode.value,
                 this.#image.files.length
             );
+            this.#handleSubmit(student.getStudent());
         });
     }
 }
