@@ -99,11 +99,11 @@ export default class FillterView {
                 break;
             }
             case 'success': {
-                console.log('success');
+                alert('Add success');
                 break;
             }
             default: {
-                console.log('looix');
+                alert('Error!!');
             }
         }
     }
