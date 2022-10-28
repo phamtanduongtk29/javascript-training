@@ -5,7 +5,13 @@ export default class Controller {
 
     async getStudents() {
         try {
-            const data = await axiosClient.get(`${process.env.URL}/students`);
+            const data = (
+                await axiosClient.get(`${process.env.URL}/students`)
+            ).map((item) => ({
+                id: item.id,
+                name: item.name,
+                image: item.image,
+            }));
             return {
                 isError: false,
                 message: 'success',

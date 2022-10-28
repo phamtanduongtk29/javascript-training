@@ -1,5 +1,22 @@
 {
   "students": [
-   
+    {
+      "code": "12312",
+      "name": "duong",
+      "gender": "male",
+      "dateOfBirth": "2022-10-18",
+      "classCode": "19-0101",
+      "image": 0,
+      "id": 1
+    },
+    {
+      "code": "12345",
+      "name": "Pham Tan Duong",
+      "gender": "male",
+      "dateOfBirth": "2022-10-04",
+      "classCode": "19-0101",
+      "image": 0,
+      "id": 2
+    }
   ]
 }

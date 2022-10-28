@@ -1,7 +1,6 @@
-import Student from './scripts/views/student.js';
-import FillterView from './scripts/views/fillter.js';
-
-const sutdent = new Student();
+import FillterView from './scripts/views/fillter.view.js';
+import StudentView from './scripts/views/student.view.js';
+const sutdent = new StudentView();
 const fillter = new FillterView();
 
 sutdent.init();
