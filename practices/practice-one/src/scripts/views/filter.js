@@ -80,10 +80,12 @@ export default class FilterView {
         });
     }
 
-    async #handleSubmit(obj) {
-        const { isError, error, type } = await this.#controller.handleAdd(obj);
+    async #handleSubmit(student) {
+        const { isError, error, type } = await this.#controller.handleAdd(
+            student
+        );
         // remove all class error
-        for (const [key, value] of Object.entries(obj)) {
+        for (const [key, value] of Object.entries(student)) {
             querySelector(`[name=${key}`).parentNode.classList.remove('error');
         }
         if (!isError) {

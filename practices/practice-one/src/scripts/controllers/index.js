@@ -4,7 +4,6 @@ export default class Controllers {
     constructor() {}
 
     async handleAdd(student) {
-        console.log(student);
         let validate = true;
         let error = {};
         for (const [key, value] of Object.entries(student)) {
@@ -27,7 +26,7 @@ export default class Controllers {
                     validate = false;
                     error = {
                         ...error,
-                        [key]: 'The code must be 10 characters long',
+                        [key]: 'The code must be 10 characters',
                     };
                 }
             }
@@ -41,7 +40,6 @@ export default class Controllers {
             );
             // check if the student exists or not
             if (result.length) {
-                console.log(result);
                 return {
                     isError: true,
                     type: 'unique',

@@ -8,6 +8,15 @@
       "classCode": "19-0101",
       "image": 1,
       "id": 1
+    },
+    {
+      "code": "1231232212",
+      "name": "feature/js-examples",
+      "gender": "male",
+      "dateOfBirth": "2022-10-31",
+      "classCode": "19-0101",
+      "image": 1,
+      "id": 2
     }
   ]
 }
