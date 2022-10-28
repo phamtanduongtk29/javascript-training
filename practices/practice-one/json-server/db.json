@@ -1,22 +1,13 @@
 {
   "students": [
     {
-      "code": "1223123",
-      "name": "duong",
-      "image": 1,
+      "code": "1231232211",
+      "name": "feature/js-examples",
       "gender": "male",
-      "dateOfBirth": "2022-10-11",
+      "dateOfBirth": "2022-10-19",
       "classCode": "19-0101",
+      "image": 1,
       "id": 1
-    },
-    {
-      "code": "012312312",
-      "name": "order-server",
-      "image": 1,
-      "gender": "male",
-      "dateOfBirth": "2022-10-11",
-      "classCode": "19-0101",
-      "id": 2
     }
   ]
 }

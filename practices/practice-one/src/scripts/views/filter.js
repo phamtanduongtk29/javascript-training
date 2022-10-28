@@ -1,5 +1,6 @@
 import { querySelector } from '../index.js';
 import Controllers from '../controllers/index.js';
+import Student from '../models/students.js';
 
 export default class FilterView {
     #controller;
@@ -80,35 +81,39 @@ export default class FilterView {
     }
 
     async #handleSubmit(obj) {
-        const result = await this.#controller.handleAdd(obj);
+        const { isError, error, type } = await this.#controller.handleAdd(obj);
         // remove all class error
         for (const [key, value] of Object.entries(obj)) {
             querySelector(`[name=${key}`).parentNode.classList.remove('error');
         }
-        if (!result.isError) {
+        if (!isError) {
             alert('Add successful');
             this.#formAdd.style.display = 'none';
             this.#overlay.style.display = 'none';
         } else {
-            for (const [key, value] of Object.entries(result.error)) {
-                const element = querySelector(`[name=${key}`).parentNode;
-                element.setAttribute('message', value);
-                element.classList.add('error');
+            if (type) {
+                alert('Student ID already exists');
+            } else {
+                for (const [key, value] of Object.entries(error)) {
+                    const element = querySelector(`[name=${key}`).parentNode;
+                    element.setAttribute('message', value);
+                    element.classList.add('error');
+                }
             }
         }
     }
 
     #submitForm() {
         this.#submitBtn.addEventListener('click', (e) => {
-            const obj = {
-                name: this.#name.value.trim(),
-                gender: this.#gender.value,
-                classCode: this.#classCode.value,
-                dateOfBirth: this.#dateOfBirth.value,
-                code: this.#code.value.trim(),
-                image: this.#image.files.length,
-            };
-            this.#handleSubmit(obj);
+            const student = new Student(
+                this.#code.value.trim(),
+                this.#name.value.trim(),
+                this.#gender.value,
+                this.#dateOfBirth.value,
+                this.#classCode.value,
+                this.#image.files.length
+            );
+            this.#handleSubmit(student.getStudent());
         });
     }
 }
