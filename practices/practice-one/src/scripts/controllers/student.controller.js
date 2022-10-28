@@ -93,4 +93,23 @@ export default class Controller {
             };
         }
     }
+
+    async getProfile(id) {
+        try {
+            const data = await axiosClient.get(
+                `${process.env.URL}/students/${id}`
+            );
+            return {
+                isError: false,
+                message: 'success',
+                data,
+            };
+        } catch (error) {
+            return {
+                isError: true,
+                message: 'Can not get student',
+                data: [],
+            };
+        }
+    }
 }
