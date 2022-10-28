@@ -2,6 +2,7 @@ import { querySelector, querySelectorAll } from '../helpers/utils.js';
 
 import Controller from '../controllers/main-controllers.js';
 import Student from '../models/students.js';
+import StudentItemView from './student-item.js';
 
 export default class FillterView {
     #controller;
@@ -20,6 +21,8 @@ export default class FillterView {
     #dateOfBirth;
     #image;
 
+    #ulElement;
+
     constructor() {
         this.#controller = new Controller();
         this.#overlay = querySelector('.overlay');
@@ -33,6 +36,7 @@ export default class FillterView {
         this.#dateOfBirth = this.#formAdd.querySelector('#date-of-birth');
         this.#image = this.#formAdd.querySelector('#image');
         this.#btnSubmit = this.#formAdd.querySelector('.btn');
+        this.#ulElement = querySelector('.students');
     }
 
     init() {
@@ -101,7 +105,9 @@ export default class FillterView {
                 break;
             }
             case 'success': {
-                alert('Add success');
+                const { id, name } = respone.student;
+                const studentItem = new StudentItemView(id, name);
+                this.#ulElement.appendChild(studentItem.createElement());
                 break;
             }
             default: {
