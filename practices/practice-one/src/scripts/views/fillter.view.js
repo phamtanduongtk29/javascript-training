@@ -1,8 +1,8 @@
 import { querySelector, querySelectorAll } from '../helpers/utils.js';
 
-import Controller from '../controllers/main-controllers.js';
-import Student from '../models/students.js';
-import StudentItemView from './student-item.js';
+import Controller from '../controllers/student.controller.js';
+import Student from '../models/students.model.js';
+import StudentItemView from './student-item.view.js';
 
 export default class FillterView {
     #controller;
@@ -108,6 +108,7 @@ export default class FillterView {
                 const { id, name } = respone.student;
                 const studentItem = new StudentItemView(id, name);
                 this.#ulElement.appendChild(studentItem.createElement());
+                this.#handleActionOverlay('none', 'none');
                 break;
             }
             default: {
