@@ -1,31 +1,43 @@
 .form-add-item {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    position: relative;
+}
+
+.form-add-item.error::after {
+    position: absolute;
+    content: attr(message);
+    top: -22px;
+    left: 34%;
+    color: var(--fifth-color);
 }
 
 .form-add-item label {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 .form-add-item input,
 .form-add-item select {
-  padding: 10px 15px;
-  outline: none;
+    padding: 10px 15px;
+    outline: none;
 }
 
 .form-add-item select,
 .form-add-item select option {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 .form-add-item:last-child {
-  grid-column: 2 / 3;
-  grid-row: 3 / 5;
+    grid-column: 2 / 3;
+    grid-row: 3 / 5;
 }
 
 .form-add-item:last-child > label:nth-child(2) {
-  border: 2px dotted;
-  padding: 50px;
-  text-align: center;
-  cursor: pointer;
+    border: 2px dotted;
+    padding: 50px;
+    text-align: center;
+    cursor: pointer;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
