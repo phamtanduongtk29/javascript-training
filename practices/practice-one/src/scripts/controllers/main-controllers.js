@@ -3,6 +3,23 @@ import { axiosClient } from '../helpers/utils.js';
 export default class Controller {
     constructor() {}
 
+    async getStudents() {
+        try {
+            const data = await axiosClient.get(`${process.env.URL}/students`);
+            return {
+                isError: false,
+                message: 'success',
+                data,
+            };
+        } catch (error) {
+            return {
+                isError: true,
+                message: 'Can not get student',
+                data: [],
+            };
+        }
+    }
+
     async handleAddStudent(student) {
         try {
             const { code } = student;
