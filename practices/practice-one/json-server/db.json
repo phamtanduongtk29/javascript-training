@@ -1,13 +1,5 @@
 {
   "students": [
-    {
-      "code": "12312",
-      "name": "feature/js-examples",
-      "gender": "male",
-      "dateOfBirth": "2022-10-19",
-      "classCode": "19-0101",
-      "image": 0,
-      "id": 1
-    }
+   
   ]
 }
