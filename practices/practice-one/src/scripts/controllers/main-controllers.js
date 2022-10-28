@@ -1,4 +1,4 @@
-import { axiosClient } from '../index.js';
+import { axiosClient } from '../helpers/utils.js';
 
 export default class Controller {
     constructor() {}

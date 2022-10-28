@@ -1,4 +1,4 @@
-import { querySelector, querySelectorAll } from '../index.js';
+import { querySelector, querySelectorAll } from '../helpers/utils.js';
 
 import Controller from '../controllers/main-controllers.js';
 import Student from '../models/students.js';
@@ -41,20 +41,22 @@ export default class FillterView {
         this.#submitForm();
     }
 
+    #handleActionOverlay(overlay, addForm) {
+        this.#overlay.style.display = overlay;
+        this.#formAdd.style.display = addForm;
+    }
+
     #handleToggleForm() {
         this.#btnAdd.addEventListener('click', (e) => {
-            this.#overlay.style.display = 'block';
-            this.#formAdd.style.display = 'flex';
+            this.#handleActionOverlay('block', 'flex');
         });
 
         this.#btnClose.addEventListener('click', (e) => {
-            this.#overlay.style.display = 'none';
-            this.#formAdd.style.display = 'none';
+            this.#handleActionOverlay('none', 'none');
         });
 
         this.#overlay.addEventListener('click', (e) => {
-            this.#overlay.style.display = 'none';
-            this.#formAdd.style.display = 'none';
+            this.#handleActionOverlay('none', 'none');
         });
 
         this.#formAdd.addEventListener('click', (e) => {
