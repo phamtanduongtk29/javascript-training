@@ -111,6 +111,28 @@ export default class StudentItemView {
         }
     }
 
+    async #handleDelete(id) {
+        const respone = await this.#controler.handleDeleteStudent(id);
+        switch (respone.type) {
+            case 'success': {
+                this.#overlay.style.display = 'none';
+                this.#formUpdate.style.display = 'none';
+                this.createElement().remove();
+                break;
+            }
+
+            default:
+                alert(respone.message);
+                break;
+        }
+    }
+
+    #addEventButtonDelete(id) {
+        this.#btnDelete.onclick = (e) => {
+            this.#handleDelete(id);
+        };
+    }
+
     #addEventButtonUpdate(id) {
         this.#btnUpdate.onclick = (e) => {
             this.#handleUpdate(id);
@@ -127,6 +149,7 @@ export default class StudentItemView {
                 this.#addDataFormUpdate(data);
                 this.#addEventIconUpdate();
                 this.#addEventButtonUpdate(data.id);
+                this.#addEventButtonDelete(data.id);
             } else {
                 alert('please wait');
             }

@@ -112,6 +112,17 @@ export default class FillterView {
                 const studentItem = new StudentItemView(id, name);
                 this.#ulElement.appendChild(studentItem.createElement());
                 this.#handleActionOverlay('none', 'none');
+                this.#code.value = '';
+                this.#name.value = '';
+                this.#gender.value = '';
+                this.#dateOfBirth.value = '';
+                this.#classCode.value = '';
+                const label =
+                    this.#image.parentElement.querySelector(
+                        'label:nth-child(2)'
+                    );
+                label.style.backgroundImage = 'unset';
+
                 break;
             }
             default: {

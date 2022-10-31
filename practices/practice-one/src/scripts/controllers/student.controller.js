@@ -141,4 +141,19 @@ export default class Controller {
             }
         } catch (error) {}
     }
+
+    async handleDeleteStudent(id) {
+        try {
+            await axiosClient.delete(`${process.env.URL}/students/${id}`);
+            return {
+                type: 'success',
+                message: 'Delete student successfully',
+            };
+        } catch (error) {
+            return {
+                type: 'error',
+                message: 'Can not delete',
+            };
+        }
+    }
 }
