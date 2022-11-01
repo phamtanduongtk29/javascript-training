@@ -9,6 +9,7 @@ export default class FillterView {
 
     #overlay;
     #formAdd;
+    #formUpdate;
 
     #btnAdd;
     #btnClose;
@@ -27,6 +28,7 @@ export default class FillterView {
         this.#controller = new Controller();
         this.#overlay = querySelector('.overlay');
         this.#formAdd = querySelector('.form-add-wrapper');
+        this.#formUpdate = querySelector('.form-update-wrapper');
         this.#btnAdd = querySelector('#add-btn');
         this.#btnClose = this.#formAdd.querySelector('.icon-item ion-icon');
         this.#name = this.#formAdd.querySelector('#name');
@@ -48,6 +50,7 @@ export default class FillterView {
     #handleActionOverlay(overlay, addForm) {
         this.#overlay.style.display = overlay;
         this.#formAdd.style.display = addForm;
+        this.#formUpdate.style.display = 'none';
     }
 
     #handleToggleForm() {
