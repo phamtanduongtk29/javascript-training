@@ -24,6 +24,7 @@ export default class StudentItemView {
     #btnUpdate;
     #btnDelete;
     #icons;
+
     constructor(id, name, image) {
         this.#controler = new Controller();
         this.#overlay = querySelector('.overlay');
@@ -111,13 +112,13 @@ export default class StudentItemView {
         }
     }
 
-    async #handleDelete(id) {
+    async #handleDelete(id, element) {
         const respone = await this.#controler.handleDeleteStudent(id);
         switch (respone.type) {
             case 'success': {
                 this.#overlay.style.display = 'none';
                 this.#formUpdate.style.display = 'none';
-                this.createElement().remove();
+                element.remove();
                 break;
             }
 
@@ -129,7 +130,8 @@ export default class StudentItemView {
 
     #addEventButtonDelete(id) {
         this.#btnDelete.onclick = (e) => {
-            this.#handleDelete(id);
+            const element = document.getElementById(`${id}`);
+            this.#handleDelete(id, element);
         };
     }
 
