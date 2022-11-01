@@ -60,7 +60,6 @@ export default class StudentItemView {
         return this.#liElement;
     }
 
-<<<<<<< HEAD
     #handleActionOverlay(overlay, formUpdate) {
         this.#overlay.style.display = overlay;
         this.#formUpdate.style.display = formUpdate;
@@ -158,7 +157,4 @@ export default class StudentItemView {
             }
         }
     }
-=======
-    #handleViewProfile(id) {}
->>>>>>> 833128a2d5a1d968d436adc464de7a6725a355e9
 }

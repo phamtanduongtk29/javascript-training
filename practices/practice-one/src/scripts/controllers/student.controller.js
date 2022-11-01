@@ -1,10 +1,14 @@
 import { axiosClient } from '../helpers/utils.js';
-
+import Service from '../helpers/service.js';
 export default class Controller {
-    constructor() {}
+    #service;
+    constructor() {
+        this.#service = new Service();
+    }
 
     async getStudents() {
         try {
+            this.#service.request();
             const data = (
                 await axiosClient.get(`${process.env.URL}/students`)
             ).map((item) => ({
