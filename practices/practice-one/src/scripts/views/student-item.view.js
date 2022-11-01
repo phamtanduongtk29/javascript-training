@@ -24,7 +24,5 @@ export default class StudentItemView {
         return this.#liElement;
     }
 
-    #handleViewProfile(id) {
-        console.log(id);
-    }
+    #handleViewProfile(id) {}
 }
