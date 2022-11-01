@@ -1,3 +1,54 @@
 {
+<<<<<<< HEAD
   "students": []
+=======
+  "students": [
+    {
+      "code": "12312",
+      "name": "duong",
+      "gender": "male",
+      "dateOfBirth": "2022-10-18",
+      "classCode": "19-0101",
+      "image": 0,
+      "id": 1
+    },
+    {
+      "code": "00000",
+      "name": "Pham Tan Duong",
+      "gender": "male",
+      "dateOfBirth": "2022-10-04",
+      "classCode": "19-0101",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
+      "id": 2
+    },
+    {
+<<<<<<< HEAD
+      "code": "00011",
+      "name": "order-server",
+      "gender": "female",
+      "dateOfBirth": "2022-10-05",
+      "classCode": "19-0303",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
+      "id": 3
+    },
+    {
+      "code": "12310",
+      "name": "order-server",
+      "gender": "male",
+      "dateOfBirth": "2022-10-11",
+      "classCode": "19-0101",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
+      "id": 4
+=======
+      "code": "12341",
+      "name": "Hoang Thị Phuong Anh",
+      "gender": "female",
+      "dateOfBirth": "2001-01-06",
+      "classCode": "19-0101",
+      "image": 1,
+      "id": 3
+>>>>>>> 833128a2d5a1d968d436adc464de7a6725a355e9
+    }
+  ]
+>>>>>>> f1fce3442df9a4b4d033ebaad193afb4643d9671
 }
