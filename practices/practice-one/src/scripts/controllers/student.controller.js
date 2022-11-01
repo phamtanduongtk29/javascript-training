@@ -48,10 +48,18 @@ export default class Controller {
                         message: 'Student ID already exists',
                     };
                 } else {
-                    axiosClient.post(`${process.env.URL}/students`, student);
+                    const { id, name, image } = await axiosClient.post(
+                        `${process.env.URL}/students`,
+                        student
+                    );
                     return {
                         type: 'success',
                         message: 'Add success',
+                        student: {
+                            id,
+                            name,
+                            image,
+                        },
                     };
                 }
             }
