@@ -8,6 +8,24 @@
       "classCode": "19-0101",
       "image": 0,
       "id": 1
+    },
+    {
+      "code": "12345",
+      "name": "Pham Tan Duong",
+      "gender": "male",
+      "dateOfBirth": "2022-10-04",
+      "classCode": "19-0101",
+      "image": 0,
+      "id": 2
+    },
+    {
+      "code": "12341",
+      "name": "Hoang Thị Phuong Anh",
+      "gender": "female",
+      "dateOfBirth": "2001-01-06",
+      "classCode": "19-0101",
+      "image": 1,
+      "id": 3
     }
   ]
 }
