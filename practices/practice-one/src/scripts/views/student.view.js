@@ -39,7 +39,6 @@ export default class StudentView {
 
     #addEvent() {
         this.#closeIcon.addEventListener('click', (e) => {
-            console.log();
             this.#handleActionOverlay('none', 'none');
         });
 
