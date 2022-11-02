@@ -99,7 +99,6 @@ export default class FillterView {
         const data = await this.#controller.handleSearch(
             this.#filterSearch.value.trim().toLowerCase()
         );
-        console.log(data);
         this.#studentView.render(data);
     }
 

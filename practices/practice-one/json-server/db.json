@@ -2,21 +2,12 @@
   "students": [
     {
       "code": "12345",
-      "name": "abc",
+      "name": "123123",
       "gender": "male",
-      "dateOfBirth": "2022-11-09",
+      "dateOfBirth": "2022-11-15",
       "classCode": "19-0101",
       "image": 0,
       "id": 1
-    },
-    {
-      "code": "12312",
-      "name": "tran phuoc kim",
-      "gender": "male",
-      "dateOfBirth": "2022-11-10",
-      "classCode": "19-0101",
-      "image": 0,
-      "id": 2
     }
   ]
 }
