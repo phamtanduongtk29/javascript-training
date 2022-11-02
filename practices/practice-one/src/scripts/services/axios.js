@@ -1,4 +1,4 @@
-import { axiosClient } from './utils.js';
+import { axiosClient } from '../helpers/utils.js';
 
 export default class Service {
     #port;
@@ -48,8 +48,7 @@ export default class Service {
             Object.entries(params).forEach(([key, value], index) => {
                 if (index !== 0) {
                     this.#params += `&${key}=${value}`;
-                }
-                this.#params += `?${key}=${value}`;
+                } else this.#params += `?${key}=${value}`;
             });
         } else this.#params = '';
     }
@@ -61,34 +60,26 @@ export default class Service {
     async request() {
         try {
             const url = this.#port + '/students' + this.#slug + this.#params;
-            console.log(url);
-            switch (this.#action) {
-                case 'GET': {
-                    const data = await axiosClient(url);
-                    return data;
-                }
-
-                case 'POST': {
-                    return;
-                }
-                case 'PUT': {
-                    return;
-                }
-                case 'DELETE': {
-                    return;
-                }
-
-                default: {
-                    return {
-                        type: 'error',
-                        message: 'Can not find action',
-                    };
-                }
+            let data = {};
+            if (this.#action === 'GET') {
+                data = await axiosClient.get(url);
+            } else if (this.#action === 'POST') {
+                data = await axiosClient.post(url, this.#payload);
+            } else if (this.#action === 'PUT') {
+                data = await axiosClient.put(url, this.#payload);
+            } else if (this.#action === 'DELETE') {
+                data = await axiosClient.delete(url);
             }
+            return {
+                type: 'success',
+                message: 'Call ' + this.#action + ' request success',
+                data,
+            };
         } catch (error) {
             return {
                 type: 'error',
                 message: 'Can not call ' + this.#action + ' request',
+                data: {},
             };
         }
     }

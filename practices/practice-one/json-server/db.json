@@ -1,22 +1,13 @@
 {
   "students": [
     {
-      "code": "12311",
+      "code": "12343",
       "name": "Pham Tan Duong",
       "gender": "male",
-      "dateOfBirth": "2022-11-21",
+      "dateOfBirth": "2022-11-18",
       "classCode": "19-0101",
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
       "id": 1
-    },
-    {
-      "code": "11111",
-      "name": "Hoang Thị Phuong Anh",
-      "gender": "female",
-      "dateOfBirth": "2001-01-06",
-      "classCode": "19-0101",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
-      "id": 2
     }
   ]
 }

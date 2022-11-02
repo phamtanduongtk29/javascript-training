@@ -103,6 +103,7 @@ export default class StudentItemView {
         switch (respone.type) {
             case 'success': {
                 alert(respone.message);
+                window.location.reload();
                 break;
             }
 

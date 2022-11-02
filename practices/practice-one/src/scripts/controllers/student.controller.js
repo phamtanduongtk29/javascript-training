@@ -1,5 +1,5 @@
 import { axiosClient } from '../helpers/utils.js';
-import Service from '../helpers/service.js';
+import Service from '../services/axios.js';
 export default class Controller {
     #service;
     constructor() {
@@ -8,10 +8,7 @@ export default class Controller {
 
     async getStudents() {
         try {
-            this.#service.request();
-            const data = (
-                await axiosClient.get(`${process.env.URL}/students`)
-            ).map((item) => ({
+            const data = (await this.#service.request()).data.map((item) => ({
                 id: item.id,
                 name: item.name,
                 image: item.image,
@@ -70,20 +67,19 @@ export default class Controller {
                     emptyField,
                 };
             } else {
-                const students = await axiosClient.get(
-                    `${process.env.URL}/students?code=${code}`
-                );
-
+                this.#service.setParams({ code });
+                const students = (await this.#service.request()).data;
                 if (students.length) {
                     return {
                         type: 'warning',
                         message: 'Student ID already exists',
                     };
                 } else {
-                    const { id, name, image } = await axiosClient.post(
-                        `${process.env.URL}/students`,
-                        student
-                    );
+                    this.#service.setPayload(student);
+                    this.#service.setAction('POST');
+                    const { id, name, image } = (await this.#service.request())
+                        .data;
+
                     return {
                         type: 'success',
                         message: 'Add success',
@@ -133,10 +129,10 @@ export default class Controller {
                     data: { ...data.data },
                 };
             } else {
-                axiosClient.put(
-                    `${process.env.URL}/students/${id}`,
-                    student.getStudent()
-                );
+                this.#service.setAction('PUT');
+                this.#service.setSlug(id);
+                this.#service.setPayload(student.getStudent());
+                const data = await this.#service.request();
                 return {
                     type: 'success',
                     message: 'Update student successfully',
@@ -148,7 +144,9 @@ export default class Controller {
 
     async handleDeleteStudent(id) {
         try {
-            await axiosClient.delete(`${process.env.URL}/students/${id}`);
+            this.#service.setSlug(id);
+            this.#service.setAction('DELETE');
+            await this.#service.request();
             return {
                 type: 'success',
                 message: 'Delete student successfully',
