@@ -20,6 +20,7 @@
 .form-add-item select {
     padding: 10px 15px;
     outline: none;
+    text-transform: capitalize;
 }
 
 .form-add-item select,

@@ -40,10 +40,11 @@ export default class Service {
     }
 
     setSlug(slug) {
-        this.#slug = '/' + slug;
+        this.#slug = slug ? '/' + slug : '';
     }
 
     setParams(params) {
+        this.#params = '';
         if (Object.keys(params).length) {
             Object.entries(params).forEach(([key, value], index) => {
                 if (index !== 0) {

@@ -67,6 +67,7 @@ export default class Controller {
                     emptyField,
                 };
             } else {
+                this.#service.setAction('GET');
                 this.#service.setParams({ code });
                 const students = (await this.#service.request()).data;
                 if (students.length) {
@@ -101,9 +102,8 @@ export default class Controller {
 
     async getProfile(id) {
         try {
-            const data = await axiosClient.get(
-                `${process.env.URL}/students/${id}`
-            );
+            this.#service.setSlug(id);
+            const data = (await this.#service.request()).data;
             return {
                 isError: false,
                 message: 'success',
@@ -157,5 +157,25 @@ export default class Controller {
                 message: 'Can not delete',
             };
         }
+    }
+
+    async handleSearch(value) {
+        try {
+            const respone = await this.#service.request();
+            if (respone.isError) {
+                return respone;
+            } else {
+                const data = respone.data.filter((student) => {
+                    return (
+                        student.code.search(value) !== -1 ||
+                        student.name.search(value) !== -1
+                    );
+                });
+                return {
+                    ...respone,
+                    data: data,
+                };
+            }
+        } catch (error) {}
     }
 }

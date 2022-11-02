@@ -25,6 +25,7 @@ export default class StudentItemView {
     #btnDelete;
     #icons;
 
+    //define all property
     constructor(id, name, image) {
         this.#controler = new Controller();
         this.#overlay = querySelector('.overlay');
@@ -49,6 +50,7 @@ export default class StudentItemView {
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU';
     }
 
+    // create li element
     createElement() {
         this.#liElement.setAttribute('id', this.#id);
         this.#liElement.innerHTML = `<div class="student-item-image"
@@ -60,6 +62,7 @@ export default class StudentItemView {
         return this.#liElement;
     }
 
+    // open or close overlay
     #handleActionOverlay(overlay, formUpdate) {
         this.#overlay.style.display = overlay;
         this.#formUpdate.style.display = formUpdate;
@@ -120,6 +123,7 @@ export default class StudentItemView {
                 this.#overlay.style.display = 'none';
                 this.#formUpdate.style.display = 'none';
                 element.remove();
+                window.location.reload();
                 break;
             }
 

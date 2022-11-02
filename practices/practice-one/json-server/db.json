@@ -1,13 +1,3 @@
 {
-  "students": [
-    {
-      "code": "12345",
-      "name": "123123213",
-      "gender": "male",
-      "dateOfBirth": "2022-11-10",
-      "classCode": "19-0101",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
-      "id": 1
-    }
-  ]
+  "students": []
 }
