@@ -171,8 +171,8 @@ export default class Controller {
             } else {
                 const data = respone.data.filter((student) => {
                     return (
-                        student.code.search(value) !== -1 ||
-                        student.name.search(value) !== -1
+                        student.code.includes(value) ||
+                        student.name.includes(value)
                     );
                 });
                 return {
