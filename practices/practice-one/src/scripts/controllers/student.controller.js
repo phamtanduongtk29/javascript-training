@@ -161,6 +161,10 @@ export default class Controller {
 
     async handleSearch(value) {
         try {
+            this.#service.setAction('GET');
+            this.#service.setParams('');
+            this.#service.getPayload({});
+            this.#service.setSlug('');
             const respone = await this.#service.request();
             if (respone.isError) {
                 return respone;

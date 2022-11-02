@@ -97,7 +97,7 @@ export default class FillterView {
 
     async #handleSearch() {
         const data = await this.#controller.handleSearch(
-            this.#filterSearch.value.trim()
+            this.#filterSearch.value.trim().toLowerCase()
         );
         console.log(data);
         this.#studentView.render(data);
@@ -162,7 +162,7 @@ export default class FillterView {
         this.#btnSubmit.addEventListener('click', (e) => {
             const student = new Student(
                 this.#code.value.trim(),
-                this.#name.value.trim(),
+                this.#name.value.trim().toLowerCase(),
                 this.#gender.value,
                 this.#dateOfBirth.value,
                 this.#classCode.value,

@@ -95,7 +95,7 @@ export default class StudentItemView {
     async #handleUpdate(id) {
         const student = new Student(
             this.#codeUpdate.value.trim(),
-            this.#nameUpdate.value.trim(),
+            this.#nameUpdate.value.trim().toLowerCase(),
             this.#genderUpdate.value,
             this.#dateOfBirthUpdate.value,
             this.#classCodeUpdate.value,
