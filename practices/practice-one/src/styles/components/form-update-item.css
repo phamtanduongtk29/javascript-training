@@ -11,12 +11,23 @@
 .information-item-update {
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .information-item-update input,
 .information-item-update select {
     flex: 1;
     padding: 10px;
+    position: relative;
+}
+
+.information-item-update.error::after {
+    position: absolute;
+    content: attr(message);
+    color: red;
+    top: -20px;
+    left: 0;
+    font-size: 15px;
 }
 
 .information-item-update input {

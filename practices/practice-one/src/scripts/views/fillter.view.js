@@ -111,12 +111,6 @@ export default class FillterView {
     async #handleSubmit(student) {
         const respone = await this.#controller.handleAddStudent(student);
         switch (respone.type) {
-            case 'warning': {
-                const liElement = this.#code.parentElement;
-                liElement.setAttribute('message', respone.message);
-                liElement.classList.add('error');
-                break;
-            }
             case 'require': {
                 // remove all error class
                 const liElement = querySelectorAll('.form-add-item');

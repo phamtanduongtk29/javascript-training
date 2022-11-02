@@ -27,7 +27,7 @@ export default class Controller {
         }
     }
 
-    #handleValidate(student) {
+    async #handleValidate(student, id = 0) {
         let emptyField = {};
         // Check if any field is empty
         for (const [key, value] of Object.entries(student)) {
@@ -49,6 +49,17 @@ export default class Controller {
                             ...emptyField,
                             [key]: 'Please enter 5 numbers',
                         };
+                    } else {
+                        const service = new Service('GET', '', {
+                            code: student.code,
+                        });
+                        const students = (await service.request()).data;
+                        if (students.length && id !== students[0].id) {
+                            emptyField = {
+                                ...emptyField,
+                                code: 'Student ID already exists',
+                            };
+                        }
                     }
                 }
             }
@@ -59,7 +70,7 @@ export default class Controller {
     async handleAddStudent(student) {
         try {
             const { code } = student;
-            const emptyField = this.#handleValidate(student);
+            const emptyField = await this.#handleValidate(student);
 
             if (Object.keys(emptyField).length) {
                 return {
@@ -67,30 +78,20 @@ export default class Controller {
                     emptyField,
                 };
             } else {
-                this.#service.setAction('GET');
-                this.#service.setParams({ code });
-                const students = (await this.#service.request()).data;
-                if (students.length) {
-                    return {
-                        type: 'warning',
-                        message: 'Student ID already exists',
-                    };
-                } else {
-                    this.#service.setPayload(student);
-                    this.#service.setAction('POST');
-                    const { id, name, image } = (await this.#service.request())
-                        .data;
+                this.#service.setPayload(student);
+                this.#service.setAction('POST');
+                const { id, name, image } = (await this.#service.request())
+                    .data;
 
-                    return {
-                        type: 'success',
-                        message: 'Add success',
-                        student: {
-                            id,
-                            name,
-                            image,
-                        },
-                    };
-                }
+                return {
+                    type: 'success',
+                    message: 'Add success',
+                    student: {
+                        id,
+                        name,
+                        image,
+                    },
+                };
             }
         } catch (error) {
             return {
@@ -102,8 +103,9 @@ export default class Controller {
 
     async getProfile(id) {
         try {
+            const service = new Service('GET', id);
             this.#service.setSlug(id);
-            const data = (await this.#service.request()).data;
+            const data = (await service.request()).data;
             return {
                 isError: false,
                 message: 'success',
@@ -113,20 +115,22 @@ export default class Controller {
             return {
                 isError: true,
                 message: 'Can not get student',
-                data: [],
+                data: {},
             };
         }
     }
 
     async handleUpdateStudent(id, student) {
         try {
-            const emptyField = this.#handleValidate(student.getStudent());
+            const emptyField = await this.#handleValidate(
+                student.getStudent(),
+                id
+            );
             if (Object.keys(emptyField).length) {
-                const data = await this.getProfile(id);
                 return {
                     type: 'error',
                     message: 'can not update student',
-                    data: { ...data.data },
+                    emptyField,
                 };
             } else {
                 this.#service.setAction('PUT');
@@ -136,7 +140,7 @@ export default class Controller {
                 return {
                     type: 'success',
                     message: 'Update student successfully',
-                    data: {},
+                    emptyField: {},
                 };
             }
         } catch (error) {}

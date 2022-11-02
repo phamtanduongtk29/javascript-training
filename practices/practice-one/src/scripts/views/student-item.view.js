@@ -110,9 +110,22 @@ export default class StudentItemView {
                 break;
             }
 
-            default:
-                this.#addDataFormUpdate(respone.data);
+            default: {
+                // remove all error class
+                const liElement = querySelectorAll('.information-item-update');
+                liElement.forEach((item) => {
+                    item.classList.remove('error');
+                });
+
+                Object.entries(respone.emptyField).forEach(([key, value]) => {
+                    const field = querySelector(
+                        `.information-item-update [name="${key}"]`
+                    ).parentElement;
+                    field.classList.add('error');
+                    field.setAttribute('message', value);
+                });
                 break;
+            }
         }
     }
 
