@@ -30,7 +30,7 @@
 ## Targets
 
 - Understand HTML/CSS properties and use them correctly
-- Divide the breakpoint properly
+- Know how to call API to get data from json-server
 - Apply knowledge of JavaScript
 
 **Step one:** Clone the code folder from git to your device
