@@ -1,4 +1,4 @@
-import { axiosClient } from '../helpers/utils.js';
+import { axiosClient } from '../helpers/index.js';
 
 export default class Service {
     #port;
@@ -7,16 +7,19 @@ export default class Service {
     #slug;
     #payload;
 
+    /**
+     *
+     * @param {String} action upercase string (GET, POST, PUT, DELETE)
+     * @param {String} slug  path children (/api)
+     * @param {Object} params the transport value on the path
+     * @param {Object} payload values ​​to send
+     */
     constructor(action = 'GET', slug = '', params = {}, payload = {}) {
         this.#port = process.env.URL;
         this.setAction(action);
         this.setParams(params);
         this.setSlug(slug);
         this.setPayload(payload);
-    }
-
-    getPorts() {
-        return this.#port;
     }
 
     getAction() {
@@ -62,14 +65,24 @@ export default class Service {
         try {
             const url = this.#port + '/students' + this.#slug + this.#params;
             let data = {};
-            if (this.#action === 'GET') {
-                data = await axiosClient.get(url);
-            } else if (this.#action === 'POST') {
-                data = await axiosClient.post(url, this.#payload);
-            } else if (this.#action === 'PUT') {
-                data = await axiosClient.put(url, this.#payload);
-            } else if (this.#action === 'DELETE') {
-                data = await axiosClient.delete(url);
+            switch (this.#action) {
+                case 'POST': {
+                    data = await axiosClient.post(url, this.#payload);
+                    break;
+                }
+                case 'PUT': {
+                    data = await axiosClient.put(url, this.#payload);
+                    break;
+                }
+                case 'DELETE': {
+                    data = await axiosClient.delete(url);
+                    break;
+                }
+
+                default: {
+                    data = await axiosClient.get(url);
+                    break;
+                }
             }
             return {
                 type: 'success',
@@ -85,3 +98,5 @@ export default class Service {
         }
     }
 }
+
+new Service();

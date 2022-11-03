@@ -1,7 +1,8 @@
-import { querySelector, querySelectorAll } from '../helpers/utils.js';
-import handleButtonSendRequest from './handle-button.js';
+import { querySelector, querySelectorAll } from '../helpers/index.js';
+import handleButtonSendRequest from '../helpers/handle-button.js';
 
 import Controller from '../controllers/student.controller.js';
+import Filter from '../controllers/filter.controller.js';
 import Student from '../models/students.model.js';
 import StudentItemView from './student-item.view.js';
 import StudentView from './student.view.js';
@@ -9,6 +10,7 @@ import StudentView from './student.view.js';
 export default class FillterView {
     #controller;
     #studentView;
+    #filterController;
 
     #overlay;
     #formAdd;
@@ -32,6 +34,7 @@ export default class FillterView {
 
     constructor() {
         this.#controller = new Controller();
+        this.#filterController = new Filter();
         this.#studentView = new StudentView();
 
         this.#overlay = querySelector('.overlay');
@@ -97,7 +100,7 @@ export default class FillterView {
     }
 
     async #handleSearch() {
-        const data = await this.#controller.handleSearch(
+        const data = await this.#filterController.handleSearch(
             this.#filterSearch.value.trim().toLowerCase()
         );
         this.#studentView.render(data);

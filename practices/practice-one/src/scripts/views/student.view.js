@@ -1,4 +1,4 @@
-import { querySelector } from '../helpers/utils.js';
+import { querySelector } from '../helpers/index.js';
 
 import Controller from '../controllers/student.controller';
 import StudentItemView from './student-item.view.js';

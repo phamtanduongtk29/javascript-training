@@ -15,6 +15,10 @@
     text-transform: capitalize;
 }
 
+.filter-search::placeholder {
+    text-transform: none;
+}
+
 .filter-box-item:first-child .btn {
     padding: 10px 15px;
     cursor: pointer;
@@ -31,8 +35,8 @@
 
 .filter-box-item:last-child .btn {
     font-weight: 700;
-    padding: 10px 20px;
-    text-transform: capitalize;
+    padding: 17px 20px;
+    text-transform: uppercase;
     cursor: pointer;
 }
 

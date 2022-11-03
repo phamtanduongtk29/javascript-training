@@ -1,5 +1,5 @@
-import { querySelector, querySelectorAll } from '../helpers/utils.js';
-import handleButtonSendRequest from './handle-button.js';
+import { querySelector, querySelectorAll } from '../helpers/index.js';
+import handleButtonSendRequest from '../helpers/handle-button.js';
 import Controller from '../controllers/student.controller.js';
 import Student from '../models/students.model.js';
 
@@ -151,8 +151,11 @@ export default class StudentItemView {
 
     #addEventButtonDelete(id) {
         this.#btnDelete.onclick = (e) => {
-            const element = document.getElementById(`${id}`);
-            this.#handleDelete(id, element);
+            const isDelete = confirm('Are you sure of it?');
+            if (isDelete) {
+                const element = document.getElementById(`${id}`);
+                this.#handleDelete(id, element);
+            }
         };
     }
 

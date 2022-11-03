@@ -1,4 +1,3 @@
-import { axiosClient } from '../helpers/utils.js';
 import Service from '../services/axios.js';
 export default class Controller {
     #service;
@@ -6,6 +5,14 @@ export default class Controller {
         this.#service = new Service();
     }
 
+    /**
+     * 
+     * @returns Object {
+                isError: true/false,
+                message: '...',
+                data: array,
+            };
+     */
     async getStudents() {
         try {
             const data = (await this.#service.request()).data.map((item) => ({
@@ -67,9 +74,19 @@ export default class Controller {
         return emptyField;
     }
 
+    /**
+     *
+     * @param {Object} student class Student()
+     * @returns Ojbject {
+     *  type:'...',
+     * message:' ',
+     * student: {
+     *  ...
+     * }
+     * }
+     */
     async handleAddStudent(student) {
         try {
-            const { code } = student;
             const emptyField = await this.#handleValidate(student);
 
             if (Object.keys(emptyField).length) {
@@ -102,6 +119,15 @@ export default class Controller {
         }
     }
 
+    /**
+     * 
+     * @param {String} id id current select
+     * @returns Object {
+                isError: ...,
+                message: '..',
+                data:...,
+            };
+     */
     async getProfile(id) {
         try {
             const service = new Service('GET', id);
@@ -121,13 +147,24 @@ export default class Controller {
         }
     }
 
+    /**
+     * 
+     *  @param {String} id id current select
+     *  @param {Object} student New student information
+     * @returns Object {
+                    type: '...',
+                    message: '...',
+                    emptyField,
+                };
+     */
     async handleUpdateStudent(id, student) {
         try {
             const emptyField = await this.#handleValidate(
                 student.getStudent(),
                 id
             );
-            if (Object.keys(emptyField).length) {
+            const isValid = Object.keys(emptyField).length;
+            if (isValid) {
                 return {
                     type: 'error',
                     message: 'can not update student',
@@ -150,6 +187,14 @@ export default class Controller {
         } catch (error) {}
     }
 
+    /**
+     * 
+     * @param {String} id current id
+     * @returns Object {
+                type: '....',
+                message: '....',
+            };
+     */
     async handleDeleteStudent(id) {
         try {
             this.#service.setSlug(id);
@@ -165,29 +210,5 @@ export default class Controller {
                 message: 'Can not delete',
             };
         }
-    }
-
-    async handleSearch(value) {
-        try {
-            this.#service.setAction('GET');
-            this.#service.setParams('');
-            this.#service.getPayload({});
-            this.#service.setSlug('');
-            const respone = await this.#service.request();
-            if (respone.isError) {
-                return respone;
-            } else {
-                const data = respone.data.filter((student) => {
-                    return (
-                        student.code.includes(value) ||
-                        student.name.includes(value)
-                    );
-                });
-                return {
-                    ...respone,
-                    data: data,
-                };
-            }
-        } catch (error) {}
     }
 }
