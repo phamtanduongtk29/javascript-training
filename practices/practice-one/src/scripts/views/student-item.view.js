@@ -1,4 +1,5 @@
 import { querySelector, querySelectorAll } from '../helpers/utils.js';
+import handleButtonSendRequest from './handle-button.js';
 import Controller from '../controllers/student.controller.js';
 import Student from '../models/students.model.js';
 
@@ -127,6 +128,7 @@ export default class StudentItemView {
                 break;
             }
         }
+        return respone;
     }
 
     async #handleDelete(id, element) {
@@ -144,6 +146,7 @@ export default class StudentItemView {
                 alert(respone.message);
                 break;
         }
+        return respone;
     }
 
     #addEventButtonDelete(id) {
@@ -155,12 +158,15 @@ export default class StudentItemView {
 
     #addEventButtonUpdate(id) {
         this.#btnUpdate.onclick = (e) => {
-            this.#handleUpdate(id);
+            handleButtonSendRequest(e.target, () => {
+                return this.#handleUpdate(id);
+            });
         };
     }
 
     async #handleViewProfile(id) {
-        const { isError, message, data } = await this.#controler.getProfile(id);
+        const respone = await this.#controler.getProfile(id);
+        const { isError, message, data } = respone;
         if (isError) {
             alert(message);
         } else {
@@ -174,5 +180,6 @@ export default class StudentItemView {
                 alert('please wait');
             }
         }
+        return respone;
     }
 }

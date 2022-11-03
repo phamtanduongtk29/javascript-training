@@ -1,4 +1,5 @@
 import { querySelector, querySelectorAll } from '../helpers/utils.js';
+import handleButtonSendRequest from './handle-button.js';
 
 import Controller from '../controllers/student.controller.js';
 import Student from '../models/students.model.js';
@@ -100,11 +101,24 @@ export default class FillterView {
             this.#filterSearch.value.trim().toLowerCase()
         );
         this.#studentView.render(data);
+        return data;
     }
 
     #addEventSearch() {
+        let timer = '';
+
+        // apply debounce to search
+        this.#filterSearch.addEventListener('input', (e) => {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(() => {
+                this.#handleSearch();
+            }, 600);
+        });
+
         this.#searchBtn.addEventListener('click', (e) => {
-            this.#handleSearch();
+            handleButtonSendRequest(e.target, () => {
+                return this.#handleSearch();
+            });
         });
     }
 
@@ -145,10 +159,14 @@ export default class FillterView {
 
                 break;
             }
+            case 'error': {
+                alert(respone.message);
+                break;
+            }
             default: {
-                alert('Error!!');
             }
         }
+        return respone;
     }
 
     #submitForm() {
@@ -161,7 +179,9 @@ export default class FillterView {
                 this.#classCode.value,
                 this.#image.files.length
             );
-            this.#handleSubmit(student.getStudent());
+            handleButtonSendRequest(e.target, () => {
+                return this.#handleSubmit(student.getStudent());
+            });
         });
     }
 }
