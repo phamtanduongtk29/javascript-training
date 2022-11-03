@@ -80,18 +80,19 @@ export default class Controller {
             } else {
                 this.#service.setPayload(student);
                 this.#service.setAction('POST');
-                const { id, name, image } = (await this.#service.request())
-                    .data;
-
-                return {
-                    type: 'success',
-                    message: 'Add success',
-                    student: {
-                        id,
-                        name,
-                        image,
-                    },
-                };
+                const data = (await this.#service.request()).data;
+                if (Object.keys(data).length) {
+                    return {
+                        type: 'success',
+                        message: 'Add success',
+                        student: {
+                            id: data.id,
+                            name: data.name,
+                            image: data.image,
+                        },
+                    };
+                }
+                return {};
             }
         } catch (error) {
             return {
@@ -137,6 +138,9 @@ export default class Controller {
                 this.#service.setSlug(id);
                 this.#service.setPayload(student.getStudent());
                 const data = await this.#service.request();
+                if (data.type === 'error') {
+                    return {};
+                }
                 return {
                     type: 'success',
                     message: 'Update student successfully',
