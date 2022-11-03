@@ -1,52 +1,64 @@
 .information-item {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
 }
 
 .information-item label {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 .information-item-update {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
 .information-item-update input,
 .information-item-update select {
-  flex: 1;
-  padding: 10px;
+    flex: 1;
+    padding: 10px;
+    position: relative;
+}
+
+.information-item-update.error::after {
+    position: absolute;
+    content: attr(message);
+    color: red;
+    top: -20px;
+    left: 0;
+    font-size: 15px;
 }
 
 .information-item-update input {
-  background-color: transparent;
-  border: none;
+    background-color: transparent;
+    border: none;
+    text-transform: capitalize;
 }
 
 .information-item-update select,
-.information-item-update input[type="date"] {
-  text-transform: capitalize;
-  cursor: pointer;
+.information-item-update input[type='date'] {
+    text-transform: capitalize;
+    cursor: pointer;
 }
 
 .information-item:nth-child(1) .information-item-update ion-icon,
 .information-item:nth-child(2) .information-item-update ion-icon {
-  visibility: visible;
+    visibility: visible;
 }
 
 .information-item-update ion-icon {
-  padding: 10px;
-  cursor: pointer;
-  font-size: 20px;
-  visibility: hidden;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    visibility: hidden;
 }
 
 .information-item-update ion-icon:hover {
-  box-shadow: 0 0 24px 1px rgb(231, 229, 229);
+    box-shadow: 0 0 24px 1px rgb(231, 229, 229);
 }
 
 .information-item-update.update input {
-  background-color: var(--secondary-color);
-  box-shadow: 0 0 1px;
+    background-color: var(--secondary-color);
+    box-shadow: 0 0 1px;
 }

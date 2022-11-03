@@ -3,14 +3,17 @@ import { querySelector, querySelectorAll } from '../helpers/utils.js';
 import Controller from '../controllers/student.controller.js';
 import Student from '../models/students.model.js';
 import StudentItemView from './student-item.view.js';
+import StudentView from './student.view.js';
 
 export default class FillterView {
     #controller;
+    #studentView;
 
     #overlay;
     #formAdd;
     #formUpdate;
 
+    #searchBtn;
     #btnAdd;
     #btnClose;
     #btnSubmit;
@@ -23,27 +26,38 @@ export default class FillterView {
     #image;
 
     #ulElement;
+    #messageEl;
+    #filterSearch;
 
     constructor() {
         this.#controller = new Controller();
+        this.#studentView = new StudentView();
+
         this.#overlay = querySelector('.overlay');
         this.#formAdd = querySelector('.form-add-wrapper');
         this.#formUpdate = querySelector('.form-update-wrapper');
-        this.#btnAdd = querySelector('#add-btn');
-        this.#btnClose = this.#formAdd.querySelector('.icon-item ion-icon');
+
         this.#name = this.#formAdd.querySelector('#name');
         this.#code = this.#formAdd.querySelector('#code');
         this.#gender = this.#formAdd.querySelector('#gender');
         this.#classCode = this.#formAdd.querySelector('#class-code');
         this.#dateOfBirth = this.#formAdd.querySelector('#date-of-birth');
         this.#image = this.#formAdd.querySelector('#image');
-        this.#btnSubmit = this.#formAdd.querySelector('.btn');
+
         this.#ulElement = querySelector('.students');
+        this.#messageEl = querySelector('.message');
+        this.#filterSearch = querySelector('.filter-search');
+
+        this.#btnAdd = querySelector('#add-btn');
+        this.#btnClose = this.#formAdd.querySelector('.icon-item ion-icon');
+        this.#btnSubmit = this.#formAdd.querySelector('.btn');
+        this.#searchBtn = querySelector('#search-btn');
     }
 
     init() {
         this.#handleToggleForm();
         this.#handleUploadImage();
+        this.#addEventSearch();
         this.#submitForm();
     }
 
@@ -81,15 +95,22 @@ export default class FillterView {
         });
     }
 
+    async #handleSearch() {
+        const data = await this.#controller.handleSearch(
+            this.#filterSearch.value.trim().toLowerCase()
+        );
+        this.#studentView.render(data);
+    }
+
+    #addEventSearch() {
+        this.#searchBtn.addEventListener('click', (e) => {
+            this.#handleSearch();
+        });
+    }
+
     async #handleSubmit(student) {
         const respone = await this.#controller.handleAddStudent(student);
         switch (respone.type) {
-            case 'warning': {
-                const liElement = this.#code.parentElement;
-                liElement.setAttribute('message', respone.message);
-                liElement.classList.add('error');
-                break;
-            }
             case 'require': {
                 // remove all error class
                 const liElement = querySelectorAll('.form-add-item');
@@ -111,12 +132,11 @@ export default class FillterView {
                 const { id, name } = respone.student;
                 const studentItem = new StudentItemView(id, name);
                 this.#ulElement.appendChild(studentItem.createElement());
+                this.#messageEl.style.display = 'none';
                 this.#handleActionOverlay('none', 'none');
                 this.#code.value = '';
                 this.#name.value = '';
-                this.#gender.value = '';
                 this.#dateOfBirth.value = '';
-                this.#classCode.value = '';
                 const label =
                     this.#image.parentElement.querySelector(
                         'label:nth-child(2)'
@@ -135,7 +155,7 @@ export default class FillterView {
         this.#btnSubmit.addEventListener('click', (e) => {
             const student = new Student(
                 this.#code.value.trim(),
-                this.#name.value.trim(),
+                this.#name.value.trim().toLowerCase(),
                 this.#gender.value,
                 this.#dateOfBirth.value,
                 this.#classCode.value,

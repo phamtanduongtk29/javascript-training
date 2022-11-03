@@ -25,6 +25,7 @@ export default class StudentItemView {
     #btnDelete;
     #icons;
 
+    //define all property
     constructor(id, name, image) {
         this.#controler = new Controller();
         this.#overlay = querySelector('.overlay');
@@ -49,6 +50,7 @@ export default class StudentItemView {
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU';
     }
 
+    // create li element
     createElement() {
         this.#liElement.setAttribute('id', this.#id);
         this.#liElement.innerHTML = `<div class="student-item-image"
@@ -60,7 +62,7 @@ export default class StudentItemView {
         return this.#liElement;
     }
 
-<<<<<<< HEAD
+    // open or close overlay
     #handleActionOverlay(overlay, formUpdate) {
         this.#overlay.style.display = overlay;
         this.#formUpdate.style.display = formUpdate;
@@ -93,7 +95,7 @@ export default class StudentItemView {
     async #handleUpdate(id) {
         const student = new Student(
             this.#codeUpdate.value.trim(),
-            this.#nameUpdate.value.trim(),
+            this.#nameUpdate.value.trim().toLowerCase(),
             this.#genderUpdate.value,
             this.#dateOfBirthUpdate.value,
             this.#classCodeUpdate.value,
@@ -104,12 +106,26 @@ export default class StudentItemView {
         switch (respone.type) {
             case 'success': {
                 alert(respone.message);
+                window.location.reload();
                 break;
             }
 
-            default:
-                this.#addDataFormUpdate(respone.data);
+            default: {
+                // remove all error class
+                const liElement = querySelectorAll('.information-item-update');
+                liElement.forEach((item) => {
+                    item.classList.remove('error');
+                });
+
+                Object.entries(respone.emptyField).forEach(([key, value]) => {
+                    const field = querySelector(
+                        `.information-item-update [name="${key}"]`
+                    ).parentElement;
+                    field.classList.add('error');
+                    field.setAttribute('message', value);
+                });
                 break;
+            }
         }
     }
 
@@ -120,6 +136,7 @@ export default class StudentItemView {
                 this.#overlay.style.display = 'none';
                 this.#formUpdate.style.display = 'none';
                 element.remove();
+                window.location.reload();
                 break;
             }
 
@@ -158,7 +175,4 @@ export default class StudentItemView {
             }
         }
     }
-=======
-    #handleViewProfile(id) {}
->>>>>>> 833128a2d5a1d968d436adc464de7a6725a355e9
 }

@@ -1,32 +1,22 @@
 {
   "students": [
     {
-      "code": "12312",
-      "name": "duong",
+      "code": "12347",
+      "name": "pham tan duong",
       "gender": "male",
-      "dateOfBirth": "2022-10-18",
+      "dateOfBirth": "2022-11-15",
       "classCode": "19-0101",
-      "image": 0,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
       "id": 1
     },
     {
-      "code": "00000",
-      "name": "Pham Tan Duong",
+      "code": "12341",
+      "name": "hoang thị phuong anh",
       "gender": "male",
-      "dateOfBirth": "2022-10-04",
+      "dateOfBirth": "2022-11-08",
       "classCode": "19-0101",
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
       "id": 2
-    },
-    {
-
-      "code": "12341",
-      "name": "Hoang Thị Phuong Anh",
-      "gender": "female",
-      "dateOfBirth": "2001-01-06",
-      "classCode": "19-0101",
-      "image": 1,
-      "id": 3
     }
   ]
 }

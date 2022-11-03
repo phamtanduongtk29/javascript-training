@@ -1,13 +1,14 @@
 import { axiosClient } from '../helpers/utils.js';
-
+import Service from '../services/axios.js';
 export default class Controller {
-    constructor() {}
+    #service;
+    constructor() {
+        this.#service = new Service();
+    }
 
     async getStudents() {
         try {
-            const data = (
-                await axiosClient.get(`${process.env.URL}/students`)
-            ).map((item) => ({
+            const data = (await this.#service.request()).data.map((item) => ({
                 id: item.id,
                 name: item.name,
                 image: item.image,
@@ -26,7 +27,7 @@ export default class Controller {
         }
     }
 
-    #handleValidate(student) {
+    async #handleValidate(student, id = 0) {
         let emptyField = {};
         // Check if any field is empty
         for (const [key, value] of Object.entries(student)) {
@@ -48,6 +49,17 @@ export default class Controller {
                             ...emptyField,
                             [key]: 'Please enter 5 numbers',
                         };
+                    } else {
+                        const service = new Service('GET', '', {
+                            code: student.code,
+                        });
+                        const students = (await service.request()).data;
+                        if (students.length && id !== students[0].id) {
+                            emptyField = {
+                                ...emptyField,
+                                code: 'Student ID already exists',
+                            };
+                        }
                     }
                 }
             }
@@ -58,7 +70,7 @@ export default class Controller {
     async handleAddStudent(student) {
         try {
             const { code } = student;
-            const emptyField = this.#handleValidate(student);
+            const emptyField = await this.#handleValidate(student);
 
             if (Object.keys(emptyField).length) {
                 return {
@@ -66,30 +78,20 @@ export default class Controller {
                     emptyField,
                 };
             } else {
-                const students = await axiosClient.get(
-                    `${process.env.URL}/students?code=${code}`
-                );
+                this.#service.setPayload(student);
+                this.#service.setAction('POST');
+                const { id, name, image } = (await this.#service.request())
+                    .data;
 
-                if (students.length) {
-                    return {
-                        type: 'warning',
-                        message: 'Student ID already exists',
-                    };
-                } else {
-                    const { id, name, image } = await axiosClient.post(
-                        `${process.env.URL}/students`,
-                        student
-                    );
-                    return {
-                        type: 'success',
-                        message: 'Add success',
-                        student: {
-                            id,
-                            name,
-                            image,
-                        },
-                    };
-                }
+                return {
+                    type: 'success',
+                    message: 'Add success',
+                    student: {
+                        id,
+                        name,
+                        image,
+                    },
+                };
             }
         } catch (error) {
             return {
@@ -101,9 +103,9 @@ export default class Controller {
 
     async getProfile(id) {
         try {
-            const data = await axiosClient.get(
-                `${process.env.URL}/students/${id}`
-            );
+            const service = new Service('GET', id);
+            this.#service.setSlug(id);
+            const data = (await service.request()).data;
             return {
                 isError: false,
                 message: 'success',
@@ -113,30 +115,32 @@ export default class Controller {
             return {
                 isError: true,
                 message: 'Can not get student',
-                data: [],
+                data: {},
             };
         }
     }
 
     async handleUpdateStudent(id, student) {
         try {
-            const emptyField = this.#handleValidate(student.getStudent());
+            const emptyField = await this.#handleValidate(
+                student.getStudent(),
+                id
+            );
             if (Object.keys(emptyField).length) {
-                const data = await this.getProfile(id);
                 return {
                     type: 'error',
                     message: 'can not update student',
-                    data: { ...data.data },
+                    emptyField,
                 };
             } else {
-                axiosClient.put(
-                    `${process.env.URL}/students/${id}`,
-                    student.getStudent()
-                );
+                this.#service.setAction('PUT');
+                this.#service.setSlug(id);
+                this.#service.setPayload(student.getStudent());
+                const data = await this.#service.request();
                 return {
                     type: 'success',
                     message: 'Update student successfully',
-                    data: {},
+                    emptyField: {},
                 };
             }
         } catch (error) {}
@@ -144,7 +148,9 @@ export default class Controller {
 
     async handleDeleteStudent(id) {
         try {
-            await axiosClient.delete(`${process.env.URL}/students/${id}`);
+            this.#service.setSlug(id);
+            this.#service.setAction('DELETE');
+            await this.#service.request();
             return {
                 type: 'success',
                 message: 'Delete student successfully',
@@ -155,5 +161,29 @@ export default class Controller {
                 message: 'Can not delete',
             };
         }
+    }
+
+    async handleSearch(value) {
+        try {
+            this.#service.setAction('GET');
+            this.#service.setParams('');
+            this.#service.getPayload({});
+            this.#service.setSlug('');
+            const respone = await this.#service.request();
+            if (respone.isError) {
+                return respone;
+            } else {
+                const data = respone.data.filter((student) => {
+                    return (
+                        student.code.includes(value) ||
+                        student.name.includes(value)
+                    );
+                });
+                return {
+                    ...respone,
+                    data: data,
+                };
+            }
+        } catch (error) {}
     }
 }

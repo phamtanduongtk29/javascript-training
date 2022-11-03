@@ -1,8 +1,17 @@
 .student-wrapper {
 }
 
+.message {
+    color: var(--fifth-color);
+    font-size: 25px;
+    font-weight: 400;
+    padding: 20px 0;
+    text-align: center;
+    display: none;
+}
+
 .students {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
 }

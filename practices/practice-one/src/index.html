@@ -12,11 +12,7 @@
         <div id="root">
             <header class="header-wrapper container">
                 <p class="header-item">
-                    <span>Student </span>
-                    <a href="/" class="header-item-logo"
-                        ><ion-icon name="book-sharp"></ion-icon
-                    ></a>
-                    <span>Manager</span>
+                    <span>Student Manager</span>
                 </p>
             </header>
             <section class="container filter-box">
@@ -37,6 +33,7 @@
                 </div>
             </section>
             <section class="student-wrapper container">
+                <h2 class="message">Data is empty now</h2>
                 <ul class="students"></ul>
             </section>
             <section class="overlay">
@@ -117,7 +114,7 @@
                                 <label for="">code</label>
                                 <div class="information-item-update">
                                     <input
-                                        name="updateCode"
+                                        name="code"
                                         type="text"
                                         value="1231233"
                                         disabled
@@ -130,7 +127,7 @@
                                 <label for="">name</label>
                                 <div class="information-item-update">
                                     <input
-                                        name="updateName"
+                                        name="name"
                                         type="text"
                                         value="pham tan duong"
                                         disabled
@@ -144,7 +141,7 @@
                                 <div class="information-item-update">
                                     <input
                                         type="date"
-                                        name="dateOfBirhtUpdate"
+                                        name="dateOfBirth"
                                         id="update-date-of-birth"
                                     />
                                     <ion-icon name="pencil-outline"></ion-icon>
@@ -154,7 +151,7 @@
                                 <label for="">class code</label>
                                 <div class="information-item-update">
                                     <select
-                                        name="classCodeUpdate"
+                                        name="classCode"
                                         id="update-class-code"
                                     >
                                         <option value="19-0101">cntt1</option>
@@ -167,10 +164,7 @@
                             <li class="information-item">
                                 <label for="">gender</label>
                                 <div class="information-item-update">
-                                    <select
-                                        name="genderUpdate"
-                                        id="update-gender"
-                                    >
+                                    <select name="gender" id="update-gender">
                                         <option value="male">male</option>
                                         <option value="female">flemale</option>
                                         <option value="other">other</option>
