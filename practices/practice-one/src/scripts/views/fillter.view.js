@@ -1,11 +1,9 @@
 import { querySelector, querySelectorAll } from '../helpers/index.js';
 import handleButtonSendRequest from '../helpers/handle-button.js';
 
-import Controller from '../controllers/student.controller.js';
 import Filter from '../controllers/filter.controller.js';
 import Student from '../models/students.model.js';
 import StudentItemView from './student-item.view.js';
-import StudentView from './student.view.js';
 
 export default class FillterView {
     #controller;
@@ -32,10 +30,10 @@ export default class FillterView {
     #messageEl;
     #filterSearch;
 
-    constructor() {
-        this.#controller = new Controller();
+    constructor(controller, app) {
+        this.#controller = controller;
         this.#filterController = new Filter();
-        this.#studentView = new StudentView();
+        this.#studentView = app;
 
         this.#overlay = querySelector('.overlay');
         this.#formAdd = querySelector('.form-add-wrapper');
@@ -112,7 +110,7 @@ export default class FillterView {
 
         // apply debounce to search
         this.#filterSearch.addEventListener('input', (e) => {
-            if (timer) clearTimeout(timer);
+            timer && clearTimeout(timer);
             timer = setTimeout(() => {
                 this.#handleSearch();
             }, 600);

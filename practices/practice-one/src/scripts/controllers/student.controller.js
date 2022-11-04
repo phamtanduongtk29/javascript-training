@@ -1,8 +1,11 @@
 import Service from '../services/axios.js';
+import Validate from '../helpers/validate.js';
 export default class Controller {
     #service;
+    #validate;
     constructor() {
         this.#service = new Service();
+        this.#validate = new Validate();
     }
 
     /**
@@ -35,43 +38,13 @@ export default class Controller {
     }
 
     async #handleValidate(student, id = 0) {
-        let emptyField = {};
-        // Check if any field is empty
-        for (const [key, value] of Object.entries(student)) {
-            if (value === '' || value === null || value === undefined) {
-                emptyField = {
-                    ...emptyField,
-                    [key]: "Can't be left blank",
-                };
-                // check code is number and length by 5
-            } else if (key === 'code') {
-                if (isNaN(value)) {
-                    emptyField = {
-                        ...emptyField,
-                        [key]: 'Please enter the number',
-                    };
-                } else {
-                    if (value.length < 5 || value.length > 5) {
-                        emptyField = {
-                            ...emptyField,
-                            [key]: 'Please enter 5 numbers',
-                        };
-                    } else {
-                        const service = new Service('GET', '', {
-                            code: student.code,
-                        });
-                        const students = (await service.request()).data;
-                        if (students.length && id !== students[0].id) {
-                            emptyField = {
-                                ...emptyField,
-                                code: 'Student ID already exists',
-                            };
-                        }
-                    }
-                }
-            }
-        }
-        return emptyField;
+        let emptyField = this.#validate.validationEmpty(student);
+        const isValidCode = await this.#validate.validateCode(student.code);
+
+        return {
+            ...emptyField,
+            ...isValidCode,
+        };
     }
 
     /**
@@ -89,28 +62,32 @@ export default class Controller {
         try {
             const emptyField = await this.#handleValidate(student);
 
-            if (Object.keys(emptyField).length) {
-                return {
-                    type: 'require',
-                    emptyField,
-                };
-            } else {
-                this.#service.setPayload(student);
-                this.#service.setAction('POST');
-                const data = (await this.#service.request()).data;
-                if (Object.keys(data).length) {
-                    return {
-                        type: 'success',
-                        message: 'Add success',
-                        student: {
-                            id: data.id,
-                            name: data.name,
-                            image: data.image,
-                        },
-                    };
-                }
-                return {};
-            }
+            const emptyFieldLength = Object.keys(emptyField).length;
+
+            const respone = emptyFieldLength
+                ? {
+                      type: 'require',
+                      emptyField,
+                  }
+                : await (async () => {
+                      this.#service.setPayload(student);
+                      this.#service.setAction('POST');
+                      const data = (await this.#service.request()).data;
+                      const dataLength = Object.keys(data).length;
+                      return dataLength
+                          ? {
+                                type: 'success',
+                                message: 'Add success',
+                                student: {
+                                    id: data.id,
+                                    name: data.name,
+                                    image: data.image,
+                                },
+                            }
+                          : {};
+                  })();
+
+            return respone;
         } catch (error) {
             return {
                 type: 'error',
@@ -164,26 +141,27 @@ export default class Controller {
                 id
             );
             const isValid = Object.keys(emptyField).length;
-            if (isValid) {
-                return {
-                    type: 'error',
-                    message: 'can not update student',
-                    emptyField,
-                };
-            } else {
-                this.#service.setAction('PUT');
-                this.#service.setSlug(id);
-                this.#service.setPayload(student.getStudent());
-                const data = await this.#service.request();
-                if (data.type === 'error') {
-                    return {};
-                }
-                return {
-                    type: 'success',
-                    message: 'Update student successfully',
-                    emptyField: {},
-                };
-            }
+            const respone = isValid
+                ? {
+                      type: 'error',
+                      message: 'can not update student',
+                      emptyField,
+                  }
+                : await (async () => {
+                      this.#service.setAction('PUT');
+                      this.#service.setSlug(id);
+                      this.#service.setPayload(student.getStudent());
+                      const data = await this.#service.request();
+                      return data.type === 'success'
+                          ? {
+                                type: 'success',
+                                message: 'Update student successfully',
+                                emptyField,
+                            }
+                          : {};
+                  })();
+
+            return respone;
         } catch (error) {}
     }
 
