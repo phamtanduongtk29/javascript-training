@@ -1,13 +1,12 @@
-import Service from '../services/axios.js';
+import { sendRequest } from '../services/axios.js';
+
 import Validate from '../helpers/validate.js';
 import TYPE from '../constants/types.js';
 import MESSAGE from '../constants/messages.js';
 
 export default class Controller {
-    #service;
     #validate;
     constructor() {
-        this.#service = new Service();
         this.#validate = new Validate();
     }
 
@@ -21,7 +20,12 @@ export default class Controller {
      */
     async getStudents() {
         try {
-            const data = (await this.#service.request()).data.map((item) => ({
+            const data = (
+                await sendRequest({
+                    method: 'GET',
+                    endpoint: '/students',
+                })
+            ).data.map((item) => ({
                 id: item.id,
                 name: item.name,
                 image: item.image,
@@ -73,9 +77,13 @@ export default class Controller {
                       emptyField,
                   }
                 : await (async () => {
-                      this.#service.setPayload(student);
-                      this.#service.setAction('POST');
-                      const data = (await this.#service.request()).data;
+                      const data = (
+                          await sendRequest({
+                              method: 'POST',
+                              endpoint: '/students',
+                              data: student,
+                          })
+                      ).data;
                       const dataLength = Object.keys(data).length;
                       return dataLength
                           ? {
@@ -92,6 +100,7 @@ export default class Controller {
 
             return respone;
         } catch (error) {
+            console.log(error);
             return {
                 type: TYPE.ERROR,
                 message: MESSAGE.ADD_FAIL,
@@ -110,9 +119,12 @@ export default class Controller {
      */
     async getProfile(id) {
         try {
-            const service = new Service('GET', id);
-            this.#service.setSlug(id);
-            const data = (await service.request()).data;
+            const data = (
+                await sendRequest({
+                    method: 'GET',
+                    endpoint: '/students/' + id,
+                })
+            ).data;
             return {
                 isError: false,
                 message: MESSAGE.GET_SUCCESS,
@@ -151,10 +163,11 @@ export default class Controller {
                       emptyField,
                   }
                 : await (async () => {
-                      this.#service.setAction('PUT');
-                      this.#service.setSlug(id);
-                      this.#service.setPayload(student.getStudent());
-                      const data = await this.#service.request();
+                      const data = await sendRequest({
+                          method: 'PUT',
+                          endpoint: '/students/' + id,
+                          data: student.getStudent(),
+                      });
                       return data.type === TYPE.SUCCESS
                           ? {
                                 type: TYPE.SUCCESS,
@@ -184,9 +197,10 @@ export default class Controller {
      */
     async handleDeleteStudent(id) {
         try {
-            this.#service.setSlug(id);
-            this.#service.setAction('DELETE');
-            await this.#service.request();
+            await sendRequest({
+                method: 'DELETE',
+                endpoint: '/students/' + id,
+            });
             return {
                 type: TYPE.SUCCESS,
                 message: MESSAGE.DEL_SUCCESS,

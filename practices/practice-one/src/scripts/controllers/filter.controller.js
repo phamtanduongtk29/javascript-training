@@ -1,4 +1,4 @@
-import Service from '../services/axios.js';
+import { sendRequest } from '../services/axios.js';
 
 export default class Filter {
     constructor() {}
@@ -10,8 +10,10 @@ export default class Filter {
      */
     async handleSearch(value) {
         try {
-            const service = new Service('GET');
-            const respone = await service.request();
+            const respone = await sendRequest({
+                method: 'GET',
+                endpoint: '/students',
+            });
             if (respone.isError) {
                 return respone;
             } else {

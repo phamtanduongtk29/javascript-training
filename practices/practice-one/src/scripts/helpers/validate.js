@@ -1,5 +1,6 @@
-import Service from '../services/axios.js';
+import { sendRequest } from '../services/axios.js';
 import messages from '../constants/messages.js';
+
 export default class Validate {
     constructor() {}
 
@@ -20,13 +21,12 @@ export default class Validate {
      * @param {String} code code to check
      */
     async validateCode(code, currentID) {
-        const service = new Service();
-        service.setParams({
-            code,
+        const respone = await sendRequest({
+            method: 'GET',
+            endpoint: `/students?code=${code}`,
         });
-        const respone = await service.request();
-        const id = respone.data[0].id;
         const length = respone.data.length;
+        const id = length && respone.data[0].id;
         const codeLength = code.length;
         const valid = !Boolean(code)
             ? { code: messages.EMPTY_MESSAGE }
