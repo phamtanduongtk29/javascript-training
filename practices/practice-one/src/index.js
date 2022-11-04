@@ -1,4 +1,6 @@
 import App from './scripts/views/app.view.js';
-const app = new App();
 
-app.start();
+document.addEventListener('DOMContentLoaded', (e) => {
+    const app = new App();
+    app.init();
+});

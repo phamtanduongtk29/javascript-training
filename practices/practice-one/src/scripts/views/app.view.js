@@ -27,7 +27,7 @@ export default class App {
         this.#closeIcon = this.#formUpdate.querySelector('.icon-item');
     }
 
-    async start() {
+    async init() {
         const respone = await this.#controller.getStudents();
         this.render(respone);
         this.#addEvent();

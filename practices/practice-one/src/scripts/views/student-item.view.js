@@ -2,6 +2,7 @@ import { querySelector, querySelectorAll } from '../helpers/index.js';
 import handleButtonSendRequest from '../helpers/handle-button.js';
 import Controller from '../controllers/student.controller.js';
 import Student from '../models/students.model.js';
+import TYPE from '../constants/types.js';
 
 export default class StudentItemView {
     #controler;
@@ -105,13 +106,13 @@ export default class StudentItemView {
 
         const respone = await this.#controler.handleUpdateStudent(id, student);
         switch (respone.type) {
-            case 'success': {
+            case TYPE.SUCCESS: {
                 alert(respone.message);
                 window.location.reload();
                 break;
             }
 
-            default: {
+            case TYPE.REQUIRE: {
                 // remove all error class
                 const liElement = querySelectorAll('.information-item-update');
                 liElement.forEach((item) => {
@@ -127,6 +128,9 @@ export default class StudentItemView {
                 });
                 break;
             }
+
+            default: {
+            }
         }
         return respone;
     }
@@ -134,7 +138,7 @@ export default class StudentItemView {
     async #handleDelete(id, element) {
         const respone = await this.#controler.handleDeleteStudent(id);
         switch (respone.type) {
-            case 'success': {
+            case TYPE.SUCCESS: {
                 this.#overlay.style.display = 'none';
                 this.#formUpdate.style.display = 'none';
                 element.remove();

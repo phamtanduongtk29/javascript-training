@@ -1,5 +1,5 @@
 import Service from '../services/axios.js';
-
+import messages from '../constants/messages.js';
 export default class Validate {
     constructor() {}
 
@@ -10,7 +10,7 @@ export default class Validate {
     validationEmpty(value) {
         const empty = {};
         Object.entries(value).forEach(([key, value]) => {
-            !Boolean(value) && (empty[key] = "Can't be left blank");
+            !Boolean(value) && (empty[key] = messages.EMPTY_MESSAGE);
         });
         return empty;
     }
@@ -19,21 +19,22 @@ export default class Validate {
      * Check if the code is valid
      * @param {String} code code to check
      */
-    async validateCode(code) {
+    async validateCode(code, currentID) {
         const service = new Service();
         service.setParams({
             code,
         });
         const respone = await service.request();
+        const id = respone.data[0].id;
         const length = respone.data.length;
         const codeLength = code.length;
         const valid = !Boolean(code)
-            ? { code: "Can't be left blank" }
-            : length
-            ? { code: 'Student ID already exists' }
+            ? { code: messages.EMPTY_MESSAGE }
+            : length && id !== currentID
+            ? { code: messages.EXISTENCE_MESSAGE }
             : isNaN(code) || codeLength < 5 || codeLength > 5
             ? {
-                  code: '5 characters and is a number',
+                  code: messages.NAN_MESSAGE,
               }
             : {};
         return valid;

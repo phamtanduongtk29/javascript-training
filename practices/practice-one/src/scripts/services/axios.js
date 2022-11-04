@@ -1,4 +1,5 @@
 import { axiosClient } from '../helpers/index.js';
+import TYPE from '../constants/types.js';
 
 export default class Service {
     #port;
@@ -85,13 +86,13 @@ export default class Service {
                 }
             }
             return {
-                type: 'success',
+                type: TYPE.SUCCESS,
                 message: 'Call ' + this.#action + ' request success',
                 data,
             };
         } catch (error) {
             return {
-                type: 'error',
+                type: TYPE.ERROR,
                 message: 'Can not call ' + this.#action + ' request',
                 data: {},
             };

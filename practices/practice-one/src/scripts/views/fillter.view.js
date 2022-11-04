@@ -1,5 +1,6 @@
 import { querySelector, querySelectorAll } from '../helpers/index.js';
 import handleButtonSendRequest from '../helpers/handle-button.js';
+import TYPE from '../constants/types.js';
 
 import Filter from '../controllers/filter.controller.js';
 import Student from '../models/students.model.js';
@@ -126,7 +127,7 @@ export default class FillterView {
     async #handleSubmit(student) {
         const respone = await this.#controller.handleAddStudent(student);
         switch (respone.type) {
-            case 'require': {
+            case TYPE.REQUIRE: {
                 // remove all error class
                 const liElement = querySelectorAll('.form-add-item');
                 liElement.forEach((item) => {
@@ -143,7 +144,7 @@ export default class FillterView {
                 }
                 break;
             }
-            case 'success': {
+            case TYPE.SUCCESS: {
                 const { id, name } = respone.student;
                 const studentItem = new StudentItemView(id, name);
                 this.#ulElement.appendChild(studentItem.createElement());
@@ -160,11 +161,9 @@ export default class FillterView {
 
                 break;
             }
-            case 'error': {
+            default: {
                 alert(respone.message);
                 break;
-            }
-            default: {
             }
         }
         return respone;

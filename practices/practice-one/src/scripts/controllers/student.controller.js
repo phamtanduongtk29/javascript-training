@@ -1,5 +1,8 @@
 import Service from '../services/axios.js';
 import Validate from '../helpers/validate.js';
+import TYPE from '../constants/types.js';
+import MESSAGE from '../constants/messages.js';
+
 export default class Controller {
     #service;
     #validate;
@@ -25,13 +28,13 @@ export default class Controller {
             }));
             return {
                 isError: false,
-                message: 'success',
+                message: MESSAGE.GET_SUCCESS,
                 data,
             };
         } catch (error) {
             return {
                 isError: true,
-                message: 'Can not get student',
+                message: MESSAGE.GET_FAIL,
                 data: [],
             };
         }
@@ -39,7 +42,7 @@ export default class Controller {
 
     async #handleValidate(student, id = 0) {
         let emptyField = this.#validate.validationEmpty(student);
-        const isValidCode = await this.#validate.validateCode(student.code);
+        const isValidCode = await this.#validate.validateCode(student.code, id);
 
         return {
             ...emptyField,
@@ -66,7 +69,7 @@ export default class Controller {
 
             const respone = emptyFieldLength
                 ? {
-                      type: 'require',
+                      type: TYPE.REQUIRE,
                       emptyField,
                   }
                 : await (async () => {
@@ -76,8 +79,8 @@ export default class Controller {
                       const dataLength = Object.keys(data).length;
                       return dataLength
                           ? {
-                                type: 'success',
-                                message: 'Add success',
+                                type: TYPE.SUCCESS,
+                                message: MESSAGE.ADD_SUCCESS,
                                 student: {
                                     id: data.id,
                                     name: data.name,
@@ -90,8 +93,8 @@ export default class Controller {
             return respone;
         } catch (error) {
             return {
-                type: 'error',
-                message: 'Can not submit form',
+                type: TYPE.ERROR,
+                message: MESSAGE.ADD_FAIL,
             };
         }
     }
@@ -112,13 +115,13 @@ export default class Controller {
             const data = (await service.request()).data;
             return {
                 isError: false,
-                message: 'success',
+                message: MESSAGE.GET_SUCCESS,
                 data,
             };
         } catch (error) {
             return {
                 isError: true,
-                message: 'Can not get student',
+                message: MESSAGE.GET_FAIL,
                 data: {},
             };
         }
@@ -143,8 +146,8 @@ export default class Controller {
             const isValid = Object.keys(emptyField).length;
             const respone = isValid
                 ? {
-                      type: 'error',
-                      message: 'can not update student',
+                      type: TYPE.REQUIRE,
+                      message: '',
                       emptyField,
                   }
                 : await (async () => {
@@ -152,17 +155,23 @@ export default class Controller {
                       this.#service.setSlug(id);
                       this.#service.setPayload(student.getStudent());
                       const data = await this.#service.request();
-                      return data.type === 'success'
+                      return data.type === TYPE.SUCCESS
                           ? {
-                                type: 'success',
-                                message: 'Update student successfully',
+                                type: TYPE.SUCCESS,
+                                message: MESSAGE.UPDATE_SUCCESS,
                                 emptyField,
                             }
                           : {};
                   })();
 
             return respone;
-        } catch (error) {}
+        } catch (error) {
+            return {
+                type: TYPE.ERROR,
+                message: MESSAGE.UPDATE_FAIL,
+                emptyField,
+            };
+        }
     }
 
     /**
@@ -179,13 +188,13 @@ export default class Controller {
             this.#service.setAction('DELETE');
             await this.#service.request();
             return {
-                type: 'success',
-                message: 'Delete student successfully',
+                type: TYPE.SUCCESS,
+                message: MESSAGE.DEL_SUCCESS,
             };
         } catch (error) {
             return {
-                type: 'error',
-                message: 'Can not delete',
+                type: TYPE.ERROR,
+                message: MESSAGE.DEL_FAIL,
             };
         }
     }
