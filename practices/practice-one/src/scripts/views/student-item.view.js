@@ -1,5 +1,5 @@
 import { querySelector, querySelectorAll } from '../helpers/index.js';
-import handleButtonSendRequest from '../helpers/handle-button.js';
+import { debounce } from '../helpers/handle-button.js';
 import Controller from '../controllers/student.controller.js';
 import Student from '../models/students.model.js';
 import TYPE from '../constants/types.js';
@@ -154,22 +154,18 @@ export default class StudentItemView {
     }
 
     #addEventButtonDelete(id) {
-        this.#btnDelete.onclick = (e) => {
+        debounce(this.#btnDelete, () => {
             const isDelete = confirm('Are you sure of it?');
-            isDelete &&
-                (() => {
-                    const element = document.getElementById(`${id}`);
-                    this.#handleDelete(id, element);
-                })();
-        };
+            if (isDelete) {
+                const element = document.getElementById(`${id}`);
+                return this.#handleDelete(id, element);
+            }
+            return !isDelete;
+        });
     }
 
     #addEventButtonUpdate(id) {
-        this.#btnUpdate.onclick = (e) => {
-            handleButtonSendRequest(e.target, () => {
-                return this.#handleUpdate(id);
-            });
-        };
+        debounce(this.#btnUpdate, () => this.#handleUpdate(id));
     }
 
     async #handleViewProfile(id) {

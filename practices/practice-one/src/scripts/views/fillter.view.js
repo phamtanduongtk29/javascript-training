@@ -1,5 +1,5 @@
 import { querySelector, querySelectorAll } from '../helpers/index.js';
-import handleButtonSendRequest from '../helpers/handle-button.js';
+import { debounce } from '../helpers/handle-button.js';
 import TYPE from '../constants/types.js';
 
 import Filter from '../controllers/filter.controller.js';
@@ -117,11 +117,7 @@ export default class FillterView {
             }, 600);
         });
 
-        this.#searchBtn.addEventListener('click', (e) => {
-            handleButtonSendRequest(e.target, () => {
-                return this.#handleSearch();
-            });
-        });
+        debounce(this.#searchBtn, () => this.#handleSearch());
     }
 
     async #handleSubmit(student) {
@@ -170,7 +166,7 @@ export default class FillterView {
     }
 
     #submitForm() {
-        this.#btnSubmit.addEventListener('click', (e) => {
+        debounce(this.#btnSubmit, () => {
             const student = new Student(
                 this.#code.value.trim(),
                 this.#name.value.trim().toLowerCase(),
@@ -179,9 +175,7 @@ export default class FillterView {
                 this.#classCode.value,
                 this.#image.files.length
             );
-            handleButtonSendRequest(e.target, () => {
-                return this.#handleSubmit(student.getStudent());
-            });
+            return this.#handleSubmit(student.getStudent());
         });
     }
 }

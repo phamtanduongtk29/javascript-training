@@ -1,13 +1,22 @@
 {
   "students": [
     {
-      "code": "11111",
+      "code": "12341",
+      "name": "duy phan",
+      "gender": "male",
+      "dateOfBirth": "2022-11-16",
+      "classCode": "19-0101",
+      "image": 1,
+      "id": 5
+    },
+    {
+      "code": "12311",
       "name": "hoang thị phuong anh",
       "gender": "male",
-      "dateOfBirth": "2022-11-01",
+      "dateOfBirth": "2022-11-09",
       "classCode": "19-0101",
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
-      "id": 3
+      "id": 6
     }
   ]
 }
