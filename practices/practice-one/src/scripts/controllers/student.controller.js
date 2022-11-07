@@ -1,6 +1,6 @@
 import { sendRequest } from '../services/axios.js';
 
-import Validate from '../helpers/validate.js';
+import Validate from '../helpers/validation.js';
 import TYPE from '../constants/types.js';
 import MESSAGE from '../constants/messages.js';
 
@@ -11,12 +11,8 @@ export default class Controller {
     }
 
     /**
-     * 
-     * @returns Object {
-                isError: true/false,
-                message: '...',
-                data: array,
-            };
+     * Get all student
+     * @returns Object
      */
     async getStudents() {
         try {
@@ -55,22 +51,14 @@ export default class Controller {
     }
 
     /**
-     *
-     * @param {Object} student class Student()
-     * @returns Ojbject {
-     *  type:'...',
-     * message:' ',
-     * student: {
-     *  ...
-     * }
-     * }
+     * Add new student
+     * @param {Student} student
+     * @returns Object
      */
     async handleAddStudent(student) {
         try {
             const emptyField = await this.#handleValidate(student);
-
             const emptyFieldLength = Object.keys(emptyField).length;
-
             const respone = emptyFieldLength
                 ? {
                       type: TYPE.REQUIRE,
@@ -100,7 +88,6 @@ export default class Controller {
 
             return respone;
         } catch (error) {
-            console.log(error);
             return {
                 type: TYPE.ERROR,
                 message: MESSAGE.ADD_FAIL,
@@ -109,13 +96,9 @@ export default class Controller {
     }
 
     /**
-     * 
+     * Get student information
      * @param {String} id id current select
-     * @returns Object {
-                isError: ...,
-                message: '..',
-                data:...,
-            };
+     * @returns Object
      */
     async getProfile(id) {
         try {
@@ -140,14 +123,10 @@ export default class Controller {
     }
 
     /**
-     * 
+     * Update student information
      *  @param {String} id id current select
      *  @param {Object} student New student information
-     * @returns Object {
-                    type: '...',
-                    message: '...',
-                    emptyField,
-                };
+     * @returns Object
      */
     async handleUpdateStudent(id, student) {
         try {
@@ -188,12 +167,9 @@ export default class Controller {
     }
 
     /**
-     * 
+     * Delete student
      * @param {String} id current id
-     * @returns Object {
-                type: '....',
-                message: '....',
-            };
+     * @returns Object
      */
     async handleDeleteStudent(id) {
         try {

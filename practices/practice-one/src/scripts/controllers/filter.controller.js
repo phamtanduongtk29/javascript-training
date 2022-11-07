@@ -4,7 +4,7 @@ export default class Filter {
     constructor() {}
 
     /**
-     *
+     * Search students by name or student code
      * @param {String} value value to look for
      * @returns Object
      */

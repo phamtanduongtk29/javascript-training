@@ -1,5 +1,5 @@
 import { querySelector, querySelectorAll } from '../helpers/index.js';
-import { debounce } from '../helpers/handle-button.js';
+import { preventSpam } from '../helpers/event-validation.js';
 import TYPE from '../constants/types.js';
 
 import Filter from '../controllers/filter.controller.js';
@@ -109,7 +109,7 @@ export default class FillterView {
     #addEventSearch() {
         let timer = '';
 
-        // apply debounce to search
+        // apply preventSpam to search
         this.#filterSearch.addEventListener('input', (e) => {
             timer && clearTimeout(timer);
             timer = setTimeout(() => {
@@ -117,7 +117,7 @@ export default class FillterView {
             }, 600);
         });
 
-        debounce(this.#searchBtn, () => this.#handleSearch());
+        preventSpam(this.#searchBtn, () => this.#handleSearch());
     }
 
     async #handleSubmit(student) {
@@ -166,7 +166,7 @@ export default class FillterView {
     }
 
     #submitForm() {
-        debounce(this.#btnSubmit, () => {
+        preventSpam(this.#btnSubmit, () => {
             const student = new Student(
                 this.#code.value.trim(),
                 this.#name.value.trim().toLowerCase(),

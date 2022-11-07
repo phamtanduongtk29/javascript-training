@@ -32,7 +32,7 @@ export default class Validate {
             ? { code: messages.EMPTY_MESSAGE }
             : length && id !== currentID
             ? { code: messages.EXISTENCE_MESSAGE }
-            : isNaN(code) || codeLength < 5 || codeLength > 5
+            : isNaN(code) || codeLength !== 5
             ? {
                   code: messages.NAN_MESSAGE,
               }

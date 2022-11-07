@@ -40,6 +40,6 @@
 
 .buttons .btn {
     padding: 10px 15px;
-    text-transform: uppercase;
+    text-transform: capitalize;
     margin: 0 10px;
 }

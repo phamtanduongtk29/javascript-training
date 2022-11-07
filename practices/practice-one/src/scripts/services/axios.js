@@ -13,8 +13,7 @@ import TYPES from '../constants/types.js';
  *  @param {Object} headers Options
  *
  * - The return value is an object with the following properties:
- * @returns
- * Object {type, message, data}
+ * @returns  Object
  */
 export async function sendRequest({ method, endpoint, data, headers }) {
     try {

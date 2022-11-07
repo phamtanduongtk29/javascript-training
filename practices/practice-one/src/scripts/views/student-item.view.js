@@ -1,5 +1,5 @@
 import { querySelector, querySelectorAll } from '../helpers/index.js';
-import { debounce } from '../helpers/handle-button.js';
+import { preventSpam } from '../helpers/event-validation.js';
 import Controller from '../controllers/student.controller.js';
 import Student from '../models/students.model.js';
 import TYPE from '../constants/types.js';
@@ -154,7 +154,7 @@ export default class StudentItemView {
     }
 
     #addEventButtonDelete(id) {
-        debounce(this.#btnDelete, () => {
+        preventSpam(this.#btnDelete, () => {
             const isDelete = confirm('Are you sure of it?');
             if (isDelete) {
                 const element = document.getElementById(`${id}`);
@@ -165,7 +165,7 @@ export default class StudentItemView {
     }
 
     #addEventButtonUpdate(id) {
-        debounce(this.#btnUpdate, () => this.#handleUpdate(id));
+        preventSpam(this.#btnUpdate, () => this.#handleUpdate(id));
     }
 
     async #handleViewProfile(id) {
