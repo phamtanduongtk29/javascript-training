@@ -1,193 +1,191 @@
-import { axiosClient } from '../helpers/utils.js';
-import Service from '../services/axios.js';
+import { sendRequest } from '../services/axios.js';
+
+import Validate from '../helpers/validation.js';
+import TYPE from '../constants/types.js';
+import MESSAGE from '../constants/messages.js';
+
 export default class Controller {
-    #service;
+    #validate;
     constructor() {
-        this.#service = new Service();
+        this.#validate = new Validate();
     }
 
+    /**
+     * Get all student
+     * @returns Object
+     */
     async getStudents() {
         try {
-            const data = (await this.#service.request()).data.map((item) => ({
+            const data = (
+                await sendRequest({
+                    method: 'GET',
+                    endpoint: '/students',
+                })
+            ).data.map((item) => ({
                 id: item.id,
                 name: item.name,
                 image: item.image,
             }));
             return {
                 isError: false,
-                message: 'success',
+                message: MESSAGE.GET_SUCCESS,
                 data,
             };
         } catch (error) {
             return {
                 isError: true,
-                message: 'Can not get student',
+                message: MESSAGE.GET_FAIL,
                 data: [],
             };
         }
     }
 
     async #handleValidate(student, id = 0) {
-        let emptyField = {};
-        // Check if any field is empty
-        for (const [key, value] of Object.entries(student)) {
-            if (value === '' || value === null || value === undefined) {
-                emptyField = {
-                    ...emptyField,
-                    [key]: "Can't be left blank",
-                };
-                // check code is number and length by 5
-            } else if (key === 'code') {
-                if (isNaN(value)) {
-                    emptyField = {
-                        ...emptyField,
-                        [key]: 'Please enter the number',
-                    };
-                } else {
-                    if (value.length < 5 || value.length > 5) {
-                        emptyField = {
-                            ...emptyField,
-                            [key]: 'Please enter 5 numbers',
-                        };
-                    } else {
-                        const service = new Service('GET', '', {
-                            code: student.code,
-                        });
-                        const students = (await service.request()).data;
-                        if (students.length && id !== students[0].id) {
-                            emptyField = {
-                                ...emptyField,
-                                code: 'Student ID already exists',
-                            };
-                        }
-                    }
-                }
-            }
-        }
-        return emptyField;
+        let emptyField = this.#validate.validationEmpty(student);
+        const isValidCode = await this.#validate.validateCode(student.code, id);
+
+        return {
+            ...emptyField,
+            ...isValidCode,
+        };
     }
 
+    /**
+     * Add new student
+     * @param {Student} student
+     * @returns Object
+     */
     async handleAddStudent(student) {
         try {
-            const { code } = student;
             const emptyField = await this.#handleValidate(student);
+            const emptyFieldLength = Object.keys(emptyField).length;
+            const respone = emptyFieldLength
+                ? {
+                      type: TYPE.REQUIRE,
+                      emptyField,
+                  }
+                : await (async () => {
+                      const data = (
+                          await sendRequest({
+                              method: 'POST',
+                              endpoint: '/students',
+                              data: student,
+                          })
+                      ).data;
+                      const dataLength = Object.keys(data).length;
+                      return dataLength
+                          ? {
+                                type: TYPE.SUCCESS,
+                                message: MESSAGE.ADD_SUCCESS,
+                                student: {
+                                    id: data.id,
+                                    name: data.name,
+                                    image: data.image,
+                                },
+                            }
+                          : {};
+                  })();
 
-            if (Object.keys(emptyField).length) {
-                return {
-                    type: 'require',
-                    emptyField,
-                };
-            } else {
-                this.#service.setPayload(student);
-                this.#service.setAction('POST');
-                const data = (await this.#service.request()).data;
-                if (Object.keys(data).length) {
-                    return {
-                        type: 'success',
-                        message: 'Add success',
-                        student: {
-                            id: data.id,
-                            name: data.name,
-                            image: data.image,
-                        },
-                    };
-                }
-                return {};
-            }
+            return respone;
         } catch (error) {
             return {
-                type: 'error',
-                message: 'Can not submit form',
+                type: TYPE.ERROR,
+                message: MESSAGE.ADD_FAIL,
             };
         }
     }
 
+    /**
+     * Get student information
+     * @param {String} id id current select
+     * @returns Object
+     */
     async getProfile(id) {
         try {
-            const service = new Service('GET', id);
-            this.#service.setSlug(id);
-            const data = (await service.request()).data;
+            const data = (
+                await sendRequest({
+                    method: 'GET',
+                    endpoint: '/students/' + id,
+                })
+            ).data;
             return {
                 isError: false,
-                message: 'success',
+                message: MESSAGE.GET_SUCCESS,
                 data,
             };
         } catch (error) {
             return {
                 isError: true,
-                message: 'Can not get student',
+                message: MESSAGE.GET_FAIL,
                 data: {},
             };
         }
     }
 
+    /**
+     * Update student information
+     *  @param {String} id id current select
+     *  @param {Object} student New student information
+     * @returns Object
+     */
     async handleUpdateStudent(id, student) {
         try {
             const emptyField = await this.#handleValidate(
                 student.getStudent(),
                 id
             );
-            if (Object.keys(emptyField).length) {
-                return {
-                    type: 'error',
-                    message: 'can not update student',
-                    emptyField,
-                };
-            } else {
-                this.#service.setAction('PUT');
-                this.#service.setSlug(id);
-                this.#service.setPayload(student.getStudent());
-                const data = await this.#service.request();
-                if (data.type === 'error') {
-                    return {};
-                }
-                return {
-                    type: 'success',
-                    message: 'Update student successfully',
-                    emptyField: {},
-                };
-            }
-        } catch (error) {}
-    }
+            const isValid = Object.keys(emptyField).length;
+            const respone = isValid
+                ? {
+                      type: TYPE.REQUIRE,
+                      message: '',
+                      emptyField,
+                  }
+                : await (async () => {
+                      const data = await sendRequest({
+                          method: 'PUT',
+                          endpoint: '/students/' + id,
+                          data: student.getStudent(),
+                      });
+                      return data.type === TYPE.SUCCESS
+                          ? {
+                                type: TYPE.SUCCESS,
+                                message: MESSAGE.UPDATE_SUCCESS,
+                                emptyField,
+                            }
+                          : {};
+                  })();
 
-    async handleDeleteStudent(id) {
-        try {
-            this.#service.setSlug(id);
-            this.#service.setAction('DELETE');
-            await this.#service.request();
-            return {
-                type: 'success',
-                message: 'Delete student successfully',
-            };
+            return respone;
         } catch (error) {
             return {
-                type: 'error',
-                message: 'Can not delete',
+                type: TYPE.ERROR,
+                message: MESSAGE.UPDATE_FAIL,
+                emptyField,
             };
         }
     }
 
-    async handleSearch(value) {
+    /**
+     * Delete student
+     * @param {String} id current id
+     * @returns Object
+     */
+    async handleDeleteStudent(id) {
         try {
-            this.#service.setAction('GET');
-            this.#service.setParams('');
-            this.#service.getPayload({});
-            this.#service.setSlug('');
-            const respone = await this.#service.request();
-            if (respone.isError) {
-                return respone;
-            } else {
-                const data = respone.data.filter((student) => {
-                    return (
-                        student.code.includes(value) ||
-                        student.name.includes(value)
-                    );
-                });
-                return {
-                    ...respone,
-                    data: data,
-                };
-            }
-        } catch (error) {}
+            await sendRequest({
+                method: 'DELETE',
+                endpoint: '/students/' + id,
+            });
+            return {
+                type: TYPE.SUCCESS,
+                message: MESSAGE.DEL_SUCCESS,
+            };
+        } catch (error) {
+            return {
+                type: TYPE.ERROR,
+                message: MESSAGE.DEL_FAIL,
+            };
+        }
     }
 }

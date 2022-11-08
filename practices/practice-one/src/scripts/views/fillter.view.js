@@ -1,14 +1,15 @@
-import { querySelector, querySelectorAll } from '../helpers/utils.js';
-import handleButtonSendRequest from './handle-button.js';
+import { querySelector, querySelectorAll } from '../helpers/index.js';
+import { preventSpam } from '../helpers/event-validation.js';
+import TYPE from '../constants/types.js';
 
-import Controller from '../controllers/student.controller.js';
+import Filter from '../controllers/filter.controller.js';
 import Student from '../models/students.model.js';
 import StudentItemView from './student-item.view.js';
-import StudentView from './student.view.js';
 
 export default class FillterView {
     #controller;
     #studentView;
+    #filterController;
 
     #overlay;
     #formAdd;
@@ -30,9 +31,10 @@ export default class FillterView {
     #messageEl;
     #filterSearch;
 
-    constructor() {
-        this.#controller = new Controller();
-        this.#studentView = new StudentView();
+    constructor(controller, app) {
+        this.#controller = controller;
+        this.#filterController = new Filter();
+        this.#studentView = app;
 
         this.#overlay = querySelector('.overlay');
         this.#formAdd = querySelector('.form-add-wrapper');
@@ -97,7 +99,7 @@ export default class FillterView {
     }
 
     async #handleSearch() {
-        const data = await this.#controller.handleSearch(
+        const data = await this.#filterController.handleSearch(
             this.#filterSearch.value.trim().toLowerCase()
         );
         this.#studentView.render(data);
@@ -107,25 +109,21 @@ export default class FillterView {
     #addEventSearch() {
         let timer = '';
 
-        // apply debounce to search
+        // apply preventSpam to search
         this.#filterSearch.addEventListener('input', (e) => {
-            if (timer) clearTimeout(timer);
+            timer && clearTimeout(timer);
             timer = setTimeout(() => {
                 this.#handleSearch();
             }, 600);
         });
 
-        this.#searchBtn.addEventListener('click', (e) => {
-            handleButtonSendRequest(e.target, () => {
-                return this.#handleSearch();
-            });
-        });
+        preventSpam(this.#searchBtn, () => this.#handleSearch());
     }
 
     async #handleSubmit(student) {
         const respone = await this.#controller.handleAddStudent(student);
         switch (respone.type) {
-            case 'require': {
+            case TYPE.REQUIRE: {
                 // remove all error class
                 const liElement = querySelectorAll('.form-add-item');
                 liElement.forEach((item) => {
@@ -142,7 +140,7 @@ export default class FillterView {
                 }
                 break;
             }
-            case 'success': {
+            case TYPE.SUCCESS: {
                 const { id, name } = respone.student;
                 const studentItem = new StudentItemView(id, name);
                 this.#ulElement.appendChild(studentItem.createElement());
@@ -159,18 +157,16 @@ export default class FillterView {
 
                 break;
             }
-            case 'error': {
+            default: {
                 alert(respone.message);
                 break;
-            }
-            default: {
             }
         }
         return respone;
     }
 
     #submitForm() {
-        this.#btnSubmit.addEventListener('click', (e) => {
+        preventSpam(this.#btnSubmit, () => {
             const student = new Student(
                 this.#code.value.trim(),
                 this.#name.value.trim().toLowerCase(),
@@ -179,9 +175,7 @@ export default class FillterView {
                 this.#classCode.value,
                 this.#image.files.length
             );
-            handleButtonSendRequest(e.target, () => {
-                return this.#handleSubmit(student.getStudent());
-            });
+            return this.#handleSubmit(student.getStudent());
         });
     }
 }

@@ -1,7 +1,8 @@
-import { querySelector, querySelectorAll } from '../helpers/utils.js';
-import handleButtonSendRequest from './handle-button.js';
+import { querySelector, querySelectorAll } from '../helpers/index.js';
+import { preventSpam } from '../helpers/event-validation.js';
 import Controller from '../controllers/student.controller.js';
 import Student from '../models/students.model.js';
+import TYPE from '../constants/types.js';
 
 export default class StudentItemView {
     #controler;
@@ -83,12 +84,12 @@ export default class StudentItemView {
             icon.onclick = (e) => {
                 const input = e.target.parentElement.querySelector('input');
                 input.disabled = !input.disabled;
-                if (!input.disabled) {
-                    input.style.backgroundColor = '#fff';
-                    input.focus();
-                } else {
-                    input.style.backgroundColor = 'transparent';
-                }
+                !input.disabled
+                    ? (() => {
+                          input.style.backgroundColor = '#fff';
+                          input.focus();
+                      })()
+                    : (input.style.backgroundColor = 'transparent');
             };
         });
     }
@@ -105,13 +106,13 @@ export default class StudentItemView {
 
         const respone = await this.#controler.handleUpdateStudent(id, student);
         switch (respone.type) {
-            case 'success': {
+            case TYPE.SUCCESS: {
                 alert(respone.message);
                 window.location.reload();
                 break;
             }
 
-            default: {
+            case TYPE.REQUIRE: {
                 // remove all error class
                 const liElement = querySelectorAll('.information-item-update');
                 liElement.forEach((item) => {
@@ -127,6 +128,9 @@ export default class StudentItemView {
                 });
                 break;
             }
+
+            default: {
+            }
         }
         return respone;
     }
@@ -134,7 +138,7 @@ export default class StudentItemView {
     async #handleDelete(id, element) {
         const respone = await this.#controler.handleDeleteStudent(id);
         switch (respone.type) {
-            case 'success': {
+            case TYPE.SUCCESS: {
                 this.#overlay.style.display = 'none';
                 this.#formUpdate.style.display = 'none';
                 element.remove();
@@ -150,36 +154,35 @@ export default class StudentItemView {
     }
 
     #addEventButtonDelete(id) {
-        this.#btnDelete.onclick = (e) => {
-            const element = document.getElementById(`${id}`);
-            this.#handleDelete(id, element);
-        };
+        preventSpam(this.#btnDelete, () => {
+            const isDelete = confirm('Are you sure of it?');
+            if (isDelete) {
+                const element = document.getElementById(`${id}`);
+                return this.#handleDelete(id, element);
+            }
+            return !isDelete;
+        });
     }
 
     #addEventButtonUpdate(id) {
-        this.#btnUpdate.onclick = (e) => {
-            handleButtonSendRequest(e.target, () => {
-                return this.#handleUpdate(id);
-            });
-        };
+        preventSpam(this.#btnUpdate, () => this.#handleUpdate(id));
     }
 
     async #handleViewProfile(id) {
         const respone = await this.#controler.getProfile(id);
         const { isError, message, data } = respone;
-        if (isError) {
-            alert(message);
-        } else {
-            if (data) {
-                this.#handleActionOverlay('block', 'block');
-                this.#addDataFormUpdate(data);
-                this.#addEventIconUpdate();
-                this.#addEventButtonUpdate(data.id);
-                this.#addEventButtonDelete(data.id);
-            } else {
-                alert('please wait');
-            }
-        }
+        isError
+            ? alert(message)
+            : data
+            ? (() => {
+                  this.#handleActionOverlay('block', 'block');
+                  this.#addDataFormUpdate(data);
+                  this.#addEventIconUpdate();
+                  this.#addEventButtonUpdate(data.id);
+                  this.#addEventButtonDelete(data.id);
+              })()
+            : alert('please wait');
+
         return respone;
     }
 }

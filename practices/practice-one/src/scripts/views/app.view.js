@@ -1,13 +1,14 @@
-import { querySelector } from '../helpers/utils.js';
-
+import { querySelector } from '../helpers/index.js';
 import Controller from '../controllers/student.controller';
 import StudentItemView from './student-item.view.js';
+import FillterView from './fillter.view.js';
 
-export default class StudentView {
+export default class App {
     #ulElement;
     #messageEl;
 
     #controller;
+    #filter;
 
     #overlay;
     #formUpdate;
@@ -16,6 +17,7 @@ export default class StudentView {
 
     constructor() {
         this.#controller = new Controller();
+        this.#filter = new FillterView(this.#controller, this);
         this.#ulElement = querySelector('.students');
         this.#messageEl = querySelector('.message');
         this.#overlay = querySelector('.overlay');
@@ -28,24 +30,22 @@ export default class StudentView {
         const respone = await this.#controller.getStudents();
         this.render(respone);
         this.#addEvent();
+        this.#filter.init();
     }
 
     async render(respone) {
-        if (respone.isError) {
-            alert(respone.message);
-        } else {
-            // If the data is empty, then notify
-            if (respone.data.length) {
-                this.#messageEl.style.display = 'none';
-            } else {
-                this.#messageEl.style.display = 'block';
-            }
-            this.#ulElement.innerHTML = '';
-            respone.data.forEach(({ id, name, image }) => {
-                const sudentItem = new StudentItemView(id, name, image);
-                this.#ulElement.appendChild(sudentItem.createElement());
-            });
-        }
+        respone.isError
+            ? alert(respone.message)
+            : (() => {
+                  this.#messageEl.style.display = !respone.data.length
+                      ? 'block'
+                      : 'none';
+                  this.#ulElement.innerHTML = '';
+                  respone.data.forEach(({ id, name, image }) => {
+                      const sudentItem = new StudentItemView(id, name, image);
+                      this.#ulElement.appendChild(sudentItem.createElement());
+                  });
+              })();
     }
 
     // add event close icon form update

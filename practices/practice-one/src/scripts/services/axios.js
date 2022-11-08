@@ -1,87 +1,38 @@
-import { axiosClient } from '../helpers/utils.js';
+import { axiosClient } from '../helpers/index.js';
+import TYPES from '../constants/types.js';
 
-export default class Service {
-    #port;
-    #action;
-    #params;
-    #slug;
-    #payload;
-
-    constructor(action = 'GET', slug = '', params = {}, payload = {}) {
-        this.#port = process.env.URL;
-        this.setAction(action);
-        this.setParams(params);
-        this.setSlug(slug);
-        this.setPayload(payload);
-    }
-
-    getPorts() {
-        return this.#port;
-    }
-
-    getAction() {
-        return this.#action;
-    }
-
-    getSlug() {
-        return this.#slug;
-    }
-
-    getParams() {
-        return this.#params;
-    }
-
-    getPayload() {
-        return this.#payload;
-    }
-
-    setAction(action) {
-        this.#action = action;
-    }
-
-    setSlug(slug) {
-        this.#slug = slug ? '/' + slug : '';
-    }
-
-    setParams(params) {
-        this.#params = '';
-        if (Object.keys(params).length) {
-            Object.entries(params).forEach(([key, value], index) => {
-                if (index !== 0) {
-                    this.#params += `&${key}=${value}`;
-                } else this.#params += `?${key}=${value}`;
-            });
-        } else this.#params = '';
-    }
-
-    setPayload(payload) {
-        this.#payload = payload;
-    }
-
-    async request() {
-        try {
-            const url = this.#port + '/students' + this.#slug + this.#params;
-            let data = {};
-            if (this.#action === 'GET') {
-                data = await axiosClient.get(url);
-            } else if (this.#action === 'POST') {
-                data = await axiosClient.post(url, this.#payload);
-            } else if (this.#action === 'PUT') {
-                data = await axiosClient.put(url, this.#payload);
-            } else if (this.#action === 'DELETE') {
-                data = await axiosClient.delete(url);
-            }
-            return {
-                type: 'success',
-                message: 'Call ' + this.#action + ' request success',
-                data,
-            };
-        } catch (error) {
-            return {
-                type: 'error',
-                message: 'Can not call ' + this.#action + ' request',
-                data: {},
-            };
-        }
+/**
+ *- Call the api to interact with the database.
+ *
+ *- The passed parameter is an Object with the following properties
+ *
+ *- (*)Are required attributes
+ *  @param {String} method (GET, POST, PUT, DELETE)*
+ *  @param {String} endpoint (/api/v1/)*
+ *  @param {Object} data Data to be sent
+ *  @param {Object} headers Options
+ *
+ * - The return value is an object with the following properties:
+ * @returns  Object
+ */
+export async function sendRequest({ method, endpoint, data, headers }) {
+    try {
+        const respone = await axiosClient({
+            method,
+            baseURL: process.env.URL + endpoint,
+            data: data,
+            headers,
+        });
+        return {
+            type: TYPES.SUCCESS,
+            message: 'Call ' + method + ' request success',
+            data: respone,
+        };
+    } catch (error) {
+        return {
+            type: TYPES.ERROR,
+            message: 'Can not call ' + method + ' request',
+            data: {},
+        };
     }
 }
