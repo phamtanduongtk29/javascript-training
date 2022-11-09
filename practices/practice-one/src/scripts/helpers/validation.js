@@ -28,15 +28,16 @@ export default class Validate {
         const length = respone.data.length;
         const id = length && respone.data[0].id;
         const codeLength = code.length;
-        const valid = !Boolean(code)
-            ? { code: messages.EMPTY_MESSAGE }
-            : length && id !== currentID
-            ? { code: messages.EXISTENCE_MESSAGE }
-            : isNaN(code) || codeLength !== 5
-            ? {
-                  code: messages.NAN_MESSAGE,
-              }
-            : {};
+        let valid = {};
+        if (!Boolean(code)) {
+            valid = { code: messages.EMPTY_MESSAGE };
+        } else {
+            if (length && id !== currentID) {
+                valid = { code: messages.EXISTENCE_MESSAGE };
+            } else if (isNaN(code) || codeLength !== 5) {
+                valid = { code: messages.NAN_MESSAGE };
+            }
+        }
         return valid;
     }
 }
