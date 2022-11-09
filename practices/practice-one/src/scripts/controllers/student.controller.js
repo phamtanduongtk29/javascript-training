@@ -41,12 +41,13 @@ export default class Controller {
     }
 
     async #handleValidate(student, id = 0) {
-        let emptyField = this.#validate.validationEmpty(student);
+        const emptyField = this.#validate.validationEmpty(student);
         const isValidCode = await this.#validate.validateCode(student.code, id);
-
+        const isValidName = this.#validate.validateText(student.name);
         return {
             ...emptyField,
             ...isValidCode,
+            ...isValidName,
         };
     }
 

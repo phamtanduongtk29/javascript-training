@@ -10,4 +10,5 @@ export default {
     GET_SUCCESS: 'Get successfully',
     ADD_FAIL: 'Add failed',
     ADD_SUCCESS: 'Add successfully',
+    SPECIAL_CHARACTERS_ERROR: 'Do not write any special signs',
 };
