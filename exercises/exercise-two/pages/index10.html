@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p>Radius</p>
+    <input type="text" id="radius" />
+    <p>Volume</p>
+    <input type="text" disabled id="volume" />
+    <button onclick="calculate()">Calculate</button>
+
+    <script>
+      const calculate = function () {
+        const value = +document.getElementById("radius").value;
+        const vol = document.getElementById("volume");
+        const v = (4 / 3) * (3.14 * value * value * value);
+        vol.value = v.toFixed(4);
+      };
+    </script>
+  </body>
+</html>

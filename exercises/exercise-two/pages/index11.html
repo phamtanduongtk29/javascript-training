@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="render"></div>
+    <button onclick="random()">Random</button>
+    <script>
+      const images = [
+        {
+          src: "http://farm4.staticflickr.com/3691/11268502654_f28f05966c_m.jpg",
+          width: "240",
+          height: "160",
+        },
+        {
+          src: "http://farm1.staticflickr.com/33/45336904_1aef569b30_n.jpg",
+          width: "320",
+          height: "195",
+        },
+        {
+          src: "http://farm6.staticflickr.com/5211/5384592886_80a512e2c9.jpg",
+          width: "500",
+          height: "343",
+        },
+      ];
+      const random = function () {
+        let x = Math.floor(Math.random() * images.length);
+        const render = document.querySelector(".render");
+        const image = document.createElement("img");
+        image.setAttribute("src", images[x].src);
+        image.style.width = images[x].width + "px";
+        image.style.height = images[x].height + "px";
+        render.appendChild(image);
+      };
+    </script>
+  </body>
+</html>

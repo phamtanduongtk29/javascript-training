@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Return first and last name from a form - w3resource</title>
+  </head>
+  <body>
+    <form id="form1" onsubmit="getFormvalue(event)">
+      First name: <input type="text" name="fname" value="David" /><br />
+      Last name: <input type="text" name="lname" value="Beckham" /><br />
+      <input
+        type="submit"
+        value="Submit"
+        onclick="(e) => { e.preventDefault();}"
+      />
+    </form>
+
+    <script>
+      const getFormvalue = (e) => {
+        e.preventDefault();
+        const fname = document.querySelector("input[name='fname']").value;
+        const lname = document.querySelector("input[name='lname']").value;
+        alert(`First Name: ${fname}\nLast Name: ${lname}`);
+      };
+    </script>
+  </body>
+</html>

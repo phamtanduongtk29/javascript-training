@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>About Me</title>
+    <style>
+      .listitem {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>About Me</h1>
+
+    <ul>
+      <li>Nickname: <span id="nickname"></span></li>
+      <li>Favorites: <span id="favorites"></span></li>
+      <li>Hometown: <span id="hometown"></span></li>
+    </ul>
+
+    <script>
+      const $ = document.querySelector.bind(document);
+      const $$ = document.querySelectorAll.bind(document);
+
+      //   Update font "Arial, sans-serif"
+      const body = $("body");
+      body.style.fontFamily = "Arial, sans-serif";
+
+      // Add name, favorites, hometown
+      const name = $("#nickname");
+      const favorites = $("#favorites");
+      const hometown = $("#hometown");
+
+      name.textContent = "Pham Tan Duong";
+      favorites.textContent = "football";
+      hometown.textContent = "Tam Ky City";
+
+      // get all li and add class listitem
+      const lis = $$("li");
+      lis.forEach((li) => {
+        li.classList.add("listitem");
+      });
+
+      // create and add img tag
+      const img = document.createElement("img");
+      img.setAttribute("src", "../images/avatar.jpg");
+      img.style.width = "200px";
+      body.appendChild(img);
+    </script>
+  </body>
+</html>

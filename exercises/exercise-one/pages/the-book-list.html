@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      .done {
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>My Book List</h1>
+
+    <script>
+      const mybooks = [
+        {
+          name: "Trạng Quỳnh 1",
+          author: "Phạm Tấn Dương 1",
+          url: "../images/avatar.jpg",
+          done: false,
+        },
+        {
+          name: "Trạng Quỳnh 2",
+          author: "Phạm Tấn Dương 2",
+          url: "../images/avatar.jpg",
+          done: true,
+        },
+        {
+          name: "Trạng Quỳnh 3",
+          author: "Phạm Tấn Dương 3",
+          url: "../images/avatar.jpg",
+          done: false,
+        },
+        {
+          name: "Trạng Quỳnh 4",
+          author: "Phạm Tấn Dương 4",
+          url: "../images/avatar.jpg",
+          done: false,
+        },
+        {
+          name: "Trạng Quỳnh 5",
+          author: "Phạm Tấn Dương 5",
+          url: "../images/avatar.jpg",
+          done: true,
+        },
+      ];
+
+      const body = document.querySelector("body");
+      const ul = document.createElement("ul");
+      mybooks.forEach((book) => {
+        const li = document.createElement("li");
+        const author = document.createElement("p");
+        const image = document.createElement("img");
+        image.style.width = "150px";
+        image.style.height = "150px";
+        image.setAttribute("src", book.url);
+        author.textContent =
+          "Tên sách: " + book.name + " Tác giả: " + book.author;
+        if (book.done) {
+          author.classList.add("done");
+        }
+        li.appendChild(author);
+        li.appendChild(image);
+        ul.appendChild(li);
+      });
+
+      body.appendChild(ul);
+    </script>
+  </body>
+</html>
