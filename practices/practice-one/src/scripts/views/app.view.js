@@ -2,6 +2,7 @@ import { querySelector } from '../helpers/index.js';
 import Controller from '../controllers/student.controller';
 import StudentItemView from './student-item.view.js';
 import FillterView from './fillter.view.js';
+import { loading } from '../helpers/dom.js';
 
 export default class App {
     #ulElement;
@@ -27,7 +28,7 @@ export default class App {
     }
 
     async init() {
-        const respone = await this.#controller.getStudents();
+        const respone = await loading(this.#controller.getStudents);
         this.render(respone);
         this.#addEvent();
         this.#filter.init();

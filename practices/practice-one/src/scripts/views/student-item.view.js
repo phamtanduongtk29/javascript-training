@@ -2,7 +2,7 @@ import { querySelector, querySelectorAll } from '../helpers/index.js';
 import { preventSpam } from '../helpers/event-validation.js';
 import Controller from '../controllers/student.controller.js';
 import { handleCleanData } from '../helpers/format-data.js';
-import { removeErrorOverlay } from '../helpers/dom.js';
+import { removeErrorOverlay, loading } from '../helpers/dom.js';
 import Student from '../models/students.model.js';
 import TYPE from '../constants/types.js';
 
@@ -118,7 +118,9 @@ export default class StudentItemView {
             image
         );
 
-        const respone = await this.#controler.handleUpdateStudent(id, student);
+        const respone = await loading(() =>
+            this.#controler.handleUpdateStudent(id, student)
+        );
         switch (respone.type) {
             case TYPE.SUCCESS: {
                 alert(respone.message);
@@ -145,7 +147,9 @@ export default class StudentItemView {
     }
 
     async #handleDelete(id, element) {
-        const respone = await this.#controler.handleDeleteStudent(id);
+        const respone = await loading(() =>
+            this.#controler.handleDeleteStudent(id)
+        );
         switch (respone.type) {
             case TYPE.SUCCESS: {
                 this.#overlay.style.display = 'none';
@@ -177,7 +181,7 @@ export default class StudentItemView {
     }
 
     async #handleViewProfile(id) {
-        const respone = await this.#controler.getProfile(id);
+        const respone = await loading(() => this.#controler.getProfile(id));
         const { isError, message, data } = respone;
         if (isError) {
             alert(message);
@@ -192,7 +196,6 @@ export default class StudentItemView {
             this.#addEventButtonDelete(data.id);
             return respone;
         }
-        alert('please wait');
         return respone;
     }
 }

@@ -3,7 +3,7 @@ import { preventSpam } from '../helpers/event-validation.js';
 import TYPE from '../constants/types.js';
 
 import { handleCleanData } from '../helpers/format-data.js';
-import { removeErrorOverlay } from '../helpers/dom.js';
+import { loading, removeErrorOverlay } from '../helpers/dom.js';
 
 import Filter from '../controllers/filter.controller.js';
 import Student from '../models/students.model.js';
@@ -112,7 +112,9 @@ export default class FillterView {
             this.#filterSearch.value.trim().toLowerCase(),
             ' '
         );
-        const data = await this.#filterController.handleSearch(value);
+        const data = await loading(() =>
+            this.#filterController.handleSearch(value)
+        );
         this.#studentView.render(data);
         return data;
     }
@@ -131,7 +133,9 @@ export default class FillterView {
     }
 
     async #handleSubmit(student) {
-        const respone = await this.#controller.handleAddStudent(student);
+        const respone = await loading(() =>
+            this.#controller.handleAddStudent(student)
+        );
         switch (respone.type) {
             case TYPE.REQUIRE: {
                 removeErrorOverlay(this.#liElements);
