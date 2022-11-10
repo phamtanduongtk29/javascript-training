@@ -1,6 +1,7 @@
 import { querySelector, querySelectorAll } from '../helpers/index.js';
 import { preventSpam } from '../helpers/event-validation.js';
 import Controller from '../controllers/student.controller.js';
+import { handleCleanData } from '../helpers/format-data.js';
 import Student from '../models/students.model.js';
 import TYPE from '../constants/types.js';
 
@@ -95,13 +96,22 @@ export default class StudentItemView {
     }
 
     async #handleUpdate(id) {
-        const student = new Student(
-            this.#codeUpdate.value.trim(),
+        const name = handleCleanData(
             this.#nameUpdate.value.trim().toLowerCase(),
-            this.#genderUpdate.value,
-            this.#dateOfBirthUpdate.value,
-            this.#classCodeUpdate.value,
-            this.#image
+            ' '
+        );
+        const code = this.#codeUpdate.value.trim();
+        const dateOfBirth = this.#dateOfBirthUpdate.value;
+        const gender = this.#genderUpdate.value;
+        const classCode = this.#classCodeUpdate.value;
+        const image = this.#image;
+        const student = new Student(
+            code,
+            name,
+            gender,
+            dateOfBirth,
+            classCode,
+            image
         );
 
         const respone = await this.#controler.handleUpdateStudent(id, student);

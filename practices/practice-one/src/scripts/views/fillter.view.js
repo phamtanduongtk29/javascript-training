@@ -2,6 +2,8 @@ import { querySelector, querySelectorAll } from '../helpers/index.js';
 import { preventSpam } from '../helpers/event-validation.js';
 import TYPE from '../constants/types.js';
 
+import { handleCleanData } from '../helpers/format-data.js';
+
 import Filter from '../controllers/filter.controller.js';
 import Student from '../models/students.model.js';
 import StudentItemView from './student-item.view.js';
@@ -64,12 +66,14 @@ export default class FillterView {
         this.#submitForm();
     }
 
+    // change the style of the overlay
     #handleActionOverlay(overlay, addForm) {
         this.#overlay.style.display = overlay;
         this.#formAdd.style.display = addForm;
         this.#formUpdate.style.display = 'none';
     }
 
+    // add button event  open or close the overlay
     #handleToggleForm() {
         this.#btnAdd.addEventListener('click', (e) => {
             this.#handleActionOverlay('block', 'flex');
@@ -88,6 +92,7 @@ export default class FillterView {
         });
     }
 
+    // handle event when selecting image
     #handleUploadImage() {
         this.#image.addEventListener('change', function (e) {
             const url = URL.createObjectURL(this.files[0]);
@@ -99,16 +104,17 @@ export default class FillterView {
     }
 
     async #handleSearch() {
-        const data = await this.#filterController.handleSearch(
-            this.#filterSearch.value.trim().toLowerCase()
+        const value = handleCleanData(
+            this.#filterSearch.value.trim().toLowerCase(),
+            ' '
         );
+        const data = await this.#filterController.handleSearch(value);
         this.#studentView.render(data);
         return data;
     }
 
     #addEventSearch() {
         let timer = '';
-
         // apply preventSpam to search
         this.#filterSearch.addEventListener('input', (e) => {
             timer && clearTimeout(timer);
@@ -167,13 +173,22 @@ export default class FillterView {
 
     #submitForm() {
         preventSpam(this.#btnSubmit, () => {
-            const student = new Student(
-                this.#code.value.trim(),
+            const name = handleCleanData(
                 this.#name.value.trim().toLowerCase(),
-                this.#gender.value,
-                this.#dateOfBirth.value,
-                this.#classCode.value,
-                this.#image.files.length
+                ' '
+            );
+            const code = this.#code.value.trim();
+            const gender = this.#gender.value;
+            const dateOfBirth = this.#dateOfBirth.value;
+            const classCode = this.#classCode.value;
+            const image = this.#image.files.length;
+            const student = new Student(
+                code,
+                name,
+                gender,
+                dateOfBirth,
+                classCode,
+                image
             );
             return this.#handleSubmit(student.getStudent());
         });

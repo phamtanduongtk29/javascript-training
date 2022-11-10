@@ -6,7 +6,8 @@ export default class Validate {
 
     /**
      * Check if the data fields are empty
-     * @param {Object} value value to validate empty
+     * @param {Student} value value to validate empty
+     * returns Object
      */
     validationEmpty(value) {
         const empty = {};
@@ -19,6 +20,7 @@ export default class Validate {
     /**
      * Check if the code is valid
      * @param {String} code code to check
+     * returns Object
      */
     async validateCode(code, currentID) {
         const respone = await sendRequest({
@@ -28,16 +30,26 @@ export default class Validate {
         const length = respone.data.length;
         const id = length && respone.data[0].id;
         const codeLength = code.length;
-        let valid = {};
         if (!Boolean(code)) {
-            valid = { code: messages.EMPTY_MESSAGE };
-        } else {
-            if (length && id !== currentID) {
-                valid = { code: messages.EXISTENCE_MESSAGE };
-            } else if (isNaN(code) || codeLength !== 5) {
-                valid = { code: messages.NAN_MESSAGE };
-            }
+            return { code: messages.EMPTY_MESSAGE };
         }
-        return valid;
+        if (length && id !== currentID) {
+            return { code: messages.EXISTENCE_MESSAGE };
+        }
+        if (isNaN(code) || codeLength !== 5) {
+            return { code: messages.NAN_MESSAGE };
+        }
+        return {};
+    }
+
+    /**
+     * Check if special characters exist
+     * @param {String} name
+     * return Object
+     */
+    validateText(name) {
+        const regex = new RegExp(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/);
+        const isValid = regex.test(name);
+        return isValid ? { name: messages.SPECIAL_CHARACTERS_ERROR } : {};
     }
 }
