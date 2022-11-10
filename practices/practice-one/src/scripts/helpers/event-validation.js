@@ -7,7 +7,7 @@ export function preventSpam(element, callback) {
     element.addEventListener('click', async () => {
         element.disabled = true;
         const data = await callback();
-        if (Object.keys(data).length || data != 0) {
+        if (Object.keys(data).length || Boolean(data)) {
             element.disabled = false;
         }
     });
