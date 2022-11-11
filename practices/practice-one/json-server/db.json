@@ -1,22 +1,13 @@
 {
-  "students": [
-    {
-      "code": "12345",
-      "name": "pham tan duong",
-      "gender": "male",
-      "dateOfBirth": "2022-11-03",
-      "classCode": "19-0101",
-      "image": 1,
-      "id": 1
-    },
-    {
-      "code": "12310",
-      "name": "pham tan duong 2",
-      "gender": "male",
-      "dateOfBirth": "2022-11-09",
-      "classCode": "19-0101",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
-      "id": 3
-    }
-  ]
+    "students": [
+        {
+            "code": "12112",
+            "name": "develop",
+            "gender": "male",
+            "dateOfBirth": "2022-11-29",
+            "classCode": "19-0101",
+            "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
+            "id": 1
+        }
+    ]
 }

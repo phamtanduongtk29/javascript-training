@@ -2,12 +2,14 @@ import { querySelector, querySelectorAll } from '../helpers/index.js';
 import { preventSpam } from '../helpers/event-validation.js';
 import Controller from '../controllers/student.controller.js';
 import { handleCleanData } from '../helpers/format-data.js';
+import { removeErrorOverlay, loading } from '../helpers/dom.js';
 import Student from '../models/students.model.js';
 import TYPE from '../constants/types.js';
 
 export default class StudentItemView {
     #controler;
     #liElement;
+    #liElements;
     #overlay;
     #formUpdate;
     #formAdd;
@@ -36,6 +38,7 @@ export default class StudentItemView {
         this.#formAdd = querySelector('.form-add-wrapper');
         this.#liElement = document.createElement('li');
         this.#liElement.classList.add('student-item');
+        this.#liElements = querySelectorAll('.information-item-update');
         this.#codeUpdate = this.#formUpdate.querySelector('#update-code');
         this.#nameUpdate = this.#formUpdate.querySelector('#update-name');
         this.#dateOfBirthUpdate = this.#formUpdate.querySelector(
@@ -70,6 +73,7 @@ export default class StudentItemView {
         this.#overlay.style.display = overlay;
         this.#formUpdate.style.display = formUpdate;
         this.#formAdd.style.display = 'none';
+        removeErrorOverlay(this.#liElements);
     }
 
     #addDataFormUpdate(data) {
@@ -114,7 +118,9 @@ export default class StudentItemView {
             image
         );
 
-        const respone = await this.#controler.handleUpdateStudent(id, student);
+        const respone = await loading(() =>
+            this.#controler.handleUpdateStudent(id, student)
+        );
         switch (respone.type) {
             case TYPE.SUCCESS: {
                 alert(respone.message);
@@ -123,12 +129,7 @@ export default class StudentItemView {
             }
 
             case TYPE.REQUIRE: {
-                // remove all error class
-                const liElement = querySelectorAll('.information-item-update');
-                liElement.forEach((item) => {
-                    item.classList.remove('error');
-                });
-
+                removeErrorOverlay(this.#liElements);
                 Object.entries(respone.emptyField).forEach(([key, value]) => {
                     const field = querySelector(
                         `.information-item-update [name="${key}"]`
@@ -146,7 +147,9 @@ export default class StudentItemView {
     }
 
     async #handleDelete(id, element) {
-        const respone = await this.#controler.handleDeleteStudent(id);
+        const respone = await loading(() =>
+            this.#controler.handleDeleteStudent(id)
+        );
         switch (respone.type) {
             case TYPE.SUCCESS: {
                 this.#overlay.style.display = 'none';
@@ -155,7 +158,6 @@ export default class StudentItemView {
                 window.location.reload();
                 break;
             }
-
             default:
                 alert(respone.message);
                 break;
@@ -179,20 +181,21 @@ export default class StudentItemView {
     }
 
     async #handleViewProfile(id) {
-        const respone = await this.#controler.getProfile(id);
+        const respone = await loading(() => this.#controler.getProfile(id));
         const { isError, message, data } = respone;
-        isError
-            ? alert(message)
-            : data
-            ? (() => {
-                  this.#handleActionOverlay('block', 'block');
-                  this.#addDataFormUpdate(data);
-                  this.#addEventIconUpdate();
-                  this.#addEventButtonUpdate(data.id);
-                  this.#addEventButtonDelete(data.id);
-              })()
-            : alert('please wait');
-
+        if (isError) {
+            alert(message);
+            return respone;
+        }
+        const length = Object.keys(data).length;
+        if (length) {
+            this.#handleActionOverlay('block', 'block');
+            this.#addDataFormUpdate(data);
+            this.#addEventIconUpdate();
+            this.#addEventButtonUpdate(data.id);
+            this.#addEventButtonDelete(data.id);
+            return respone;
+        }
         return respone;
     }
 }

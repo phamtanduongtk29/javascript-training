@@ -38,9 +38,11 @@
                 <ul class="students"></ul>
             </section>
             <section class="overlay">
-                <section
+                <form
                     class="form-add-wrapper container"
                     style="display: flex"
+                    action="#"
+                    method="post"
                 >
                     <div class="icon-item">
                         <ion-icon name="close-outline"></ion-icon>
@@ -100,9 +102,11 @@
                             />
                         </li>
                     </ul>
-                    <button class="btn btn-primary">submit</button>
-                </section>
-                <section class="form-update-wrapper">
+                    <button class="btn btn-primary" type="submit">
+                        submit
+                    </button>
+                </form>
+                <form action="#" method="post" class="form-update-wrapper">
                     <div class="icon-item">
                         <ion-icon name="close-outline"></ion-icon>
                     </div>
@@ -183,8 +187,9 @@
                             </button>
                         </div>
                     </section>
-                </section>
+                </form>
             </section>
+            <section class="loading"></section>
         </div>
         <script
             type="module"

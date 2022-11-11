@@ -3,6 +3,7 @@ import { preventSpam } from '../helpers/event-validation.js';
 import TYPE from '../constants/types.js';
 
 import { handleCleanData } from '../helpers/format-data.js';
+import { loading, removeErrorOverlay } from '../helpers/dom.js';
 
 import Filter from '../controllers/filter.controller.js';
 import Student from '../models/students.model.js';
@@ -32,6 +33,7 @@ export default class FillterView {
     #ulElement;
     #messageEl;
     #filterSearch;
+    #liElements;
 
     constructor(controller, app) {
         this.#controller = controller;
@@ -52,6 +54,7 @@ export default class FillterView {
         this.#ulElement = querySelector('.students');
         this.#messageEl = querySelector('.message');
         this.#filterSearch = querySelector('.filter-search');
+        this.#liElements = querySelectorAll('.form-add-item');
 
         this.#btnAdd = querySelector('#add-btn');
         this.#btnClose = this.#formAdd.querySelector('.icon-item ion-icon');
@@ -71,6 +74,7 @@ export default class FillterView {
         this.#overlay.style.display = overlay;
         this.#formAdd.style.display = addForm;
         this.#formUpdate.style.display = 'none';
+        removeErrorOverlay(this.#liElements);
     }
 
     // add button event  open or close the overlay
@@ -108,7 +112,9 @@ export default class FillterView {
             this.#filterSearch.value.trim().toLowerCase(),
             ' '
         );
-        const data = await this.#filterController.handleSearch(value);
+        const data = await loading(() =>
+            this.#filterController.handleSearch(value)
+        );
         this.#studentView.render(data);
         return data;
     }
@@ -127,15 +133,12 @@ export default class FillterView {
     }
 
     async #handleSubmit(student) {
-        const respone = await this.#controller.handleAddStudent(student);
+        const respone = await loading(() =>
+            this.#controller.handleAddStudent(student)
+        );
         switch (respone.type) {
             case TYPE.REQUIRE: {
-                // remove all error class
-                const liElement = querySelectorAll('.form-add-item');
-                liElement.forEach((item) => {
-                    item.classList.remove('error');
-                });
-
+                removeErrorOverlay(this.#liElements);
                 // apply error class
                 for (const [key, value] of Object.entries(respone.emptyField)) {
                     const element = querySelector(
