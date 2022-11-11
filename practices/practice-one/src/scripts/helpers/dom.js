@@ -1,3 +1,5 @@
+import { querySelector, querySelectorAll } from '../helpers/index';
+
 /**
  * - Remove all error class
  * @param {Array} elements // list DOM element
@@ -14,11 +16,21 @@ export const removeErrorOverlay = (elements) => {
  * @returns {Object} data after API call
  */
 export const loading = async (callback) => {
-    const loadEl = document.querySelector('.loading');
+    const loadEl = querySelector('.loading');
     loadEl.style.display = 'block';
     const data = await callback();
     if (data) {
         loadEl.style.display = 'none';
     }
     return data;
+};
+
+/**
+ * Show empty student list message and hide search function
+ */
+export const checkEmptyStudent = () => {
+    const students = querySelectorAll('.student-item').length;
+    console.log(students);
+    const message = querySelector('.message');
+    message.style.display = !students ? 'block' : 'none';
 };

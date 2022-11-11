@@ -16,12 +16,11 @@ export default class Controller {
      */
     async getStudents() {
         try {
-            const data = (
-                await sendRequest({
-                    method: 'GET',
-                    endpoint: '/students',
-                })
-            ).data.map((item) => ({
+            const response = await sendRequest({
+                method: 'GET',
+                endpoint: '/students',
+            });
+            const data = response.data.map((item) => ({
                 id: item.id,
                 name: item.name,
                 image: item.image,
@@ -29,14 +28,10 @@ export default class Controller {
             return {
                 isError: false,
                 message: MESSAGE.GET_SUCCESS,
-                data,
+                data: data,
             };
         } catch (error) {
-            return {
-                isError: true,
-                message: MESSAGE.GET_FAIL,
-                data: [],
-            };
+            console.log('catch');
         }
     }
 
@@ -136,28 +131,25 @@ export default class Controller {
                 id
             );
             const isValid = Object.keys(emptyField).length;
-            const respone = isValid
+            if (isValid) {
+                return {
+                    type: TYPE.REQUIRE,
+                    message: '',
+                    emptyField,
+                };
+            }
+            const data = await sendRequest({
+                method: 'PUT',
+                endpoint: '/students/' + id,
+                data: student.getStudent(),
+            });
+            return data.type === TYPE.SUCCESS
                 ? {
-                      type: TYPE.REQUIRE,
-                      message: '',
+                      type: TYPE.SUCCESS,
+                      message: MESSAGE.UPDATE_SUCCESS,
                       emptyField,
                   }
-                : await (async () => {
-                      const data = await sendRequest({
-                          method: 'PUT',
-                          endpoint: '/students/' + id,
-                          data: student.getStudent(),
-                      });
-                      return data.type === TYPE.SUCCESS
-                          ? {
-                                type: TYPE.SUCCESS,
-                                message: MESSAGE.UPDATE_SUCCESS,
-                                emptyField,
-                            }
-                          : {};
-                  })();
-
-            return respone;
+                : {};
         } catch (error) {
             return {
                 type: TYPE.ERROR,

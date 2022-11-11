@@ -2,7 +2,11 @@ import { querySelector, querySelectorAll } from '../helpers/index.js';
 import { preventSpam } from '../helpers/event-validation.js';
 import Controller from '../controllers/student.controller.js';
 import { handleCleanData } from '../helpers/format-data.js';
-import { removeErrorOverlay, loading } from '../helpers/dom.js';
+import {
+    removeErrorOverlay,
+    loading,
+    checkEmptyStudent,
+} from '../helpers/dom.js';
 import Student from '../models/students.model.js';
 import TYPE from '../constants/types.js';
 
@@ -89,12 +93,12 @@ export default class StudentItemView {
             icon.onclick = (e) => {
                 const input = e.target.parentElement.querySelector('input');
                 input.disabled = !input.disabled;
-                !input.disabled
-                    ? (() => {
-                          input.style.backgroundColor = '#fff';
-                          input.focus();
-                      })()
-                    : (input.style.backgroundColor = 'transparent');
+                if (!input.disabled) {
+                    input.style.backgroundColor = '#fff';
+                    input.focus();
+                } else {
+                    input.style.backgroundColor = 'transparent';
+                }
             };
         });
     }
@@ -155,7 +159,7 @@ export default class StudentItemView {
                 this.#overlay.style.display = 'none';
                 this.#formUpdate.style.display = 'none';
                 element.remove();
-                window.location.reload();
+                checkEmptyStudent();
                 break;
             }
             default:

@@ -15,8 +15,3 @@ export const querySelector = document.querySelector.bind(document);
 export const querySelectorAll = document.querySelectorAll.bind(document);
 
 export const axiosClient = axios.create();
-
-/**
- * return data configuration
- */
-axiosClient.interceptors.response.use((res) => res.data);
