@@ -127,7 +127,10 @@ export default class StudentItemView {
         );
         switch (respone.type) {
             case TYPE.SUCCESS: {
-                window.location.reload();
+                const name = respone.data.name;
+                const studentItem = document.getElementById(`${id}`);
+                studentItem.querySelector('.student-item-name').innerText =
+                    name;
                 break;
             }
 
