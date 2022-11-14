@@ -127,7 +127,6 @@ export default class StudentItemView {
         );
         switch (respone.type) {
             case TYPE.SUCCESS: {
-                alert(respone.message);
                 window.location.reload();
                 break;
             }
@@ -163,7 +162,6 @@ export default class StudentItemView {
                 break;
             }
             default:
-                alert(respone.message);
                 break;
         }
         return respone;
@@ -186,20 +184,15 @@ export default class StudentItemView {
 
     async #handleViewProfile(id) {
         const respone = await loading(() => this.#controler.getProfile(id));
-        const { isError, message, data } = respone;
-        if (isError) {
-            alert(message);
+        const { type, data } = respone;
+        if (type === TYPE.ERROR) {
             return respone;
         }
-        const length = Object.keys(data).length;
-        if (length) {
-            this.#handleActionOverlay('block', 'block');
-            this.#addDataFormUpdate(data);
-            this.#addEventIconUpdate();
-            this.#addEventButtonUpdate(data.id);
-            this.#addEventButtonDelete(data.id);
-            return respone;
-        }
+        this.#handleActionOverlay('block', 'block');
+        this.#addDataFormUpdate(data);
+        this.#addEventIconUpdate();
+        this.#addEventButtonUpdate(data.id);
+        this.#addEventButtonDelete(data.id);
         return respone;
     }
 }

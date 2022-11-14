@@ -30,7 +30,6 @@ export const loading = async (callback) => {
  */
 export const checkEmptyStudent = () => {
     const students = querySelectorAll('.student-item').length;
-    console.log(students);
     const message = querySelector('.message');
     message.style.display = !students ? 'block' : 'none';
 };
