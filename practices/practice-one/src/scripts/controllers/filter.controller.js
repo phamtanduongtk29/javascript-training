@@ -14,20 +14,17 @@ export default class Filter {
                 method: 'GET',
                 endpoint: '/students',
             });
-            if (respone.isError) {
-                return respone;
-            } else {
-                const data = respone.data.filter((student) => {
-                    return (
-                        student.code.includes(value) ||
-                        student.name.includes(value)
-                    );
-                });
-                return {
-                    ...respone,
-                    data: data,
-                };
-            }
-        } catch (error) {}
+            const data = respone.data.filter((student) => {
+                return (
+                    student.code.includes(value) || student.name.includes(value)
+                );
+            });
+            return {
+                ...respone,
+                data: data,
+            };
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }

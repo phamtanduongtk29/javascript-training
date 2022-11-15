@@ -2,7 +2,11 @@ import { querySelector, querySelectorAll } from '../helpers/index.js';
 import { preventSpam } from '../helpers/event-validation.js';
 import Controller from '../controllers/student.controller.js';
 import { handleCleanData } from '../helpers/format-data.js';
-import { removeErrorOverlay, loading } from '../helpers/dom.js';
+import {
+    removeErrorOverlay,
+    loading,
+    checkEmptyStudent,
+} from '../helpers/dom.js';
 import Student from '../models/students.model.js';
 import TYPE from '../constants/types.js';
 
@@ -89,12 +93,12 @@ export default class StudentItemView {
             icon.onclick = (e) => {
                 const input = e.target.parentElement.querySelector('input');
                 input.disabled = !input.disabled;
-                !input.disabled
-                    ? (() => {
-                          input.style.backgroundColor = '#fff';
-                          input.focus();
-                      })()
-                    : (input.style.backgroundColor = 'transparent');
+                if (!input.disabled) {
+                    input.style.backgroundColor = '#fff';
+                    input.focus();
+                } else {
+                    input.style.backgroundColor = 'transparent';
+                }
             };
         });
     }
@@ -123,8 +127,10 @@ export default class StudentItemView {
         );
         switch (respone.type) {
             case TYPE.SUCCESS: {
-                alert(respone.message);
-                window.location.reload();
+                const name = respone.data.name;
+                const studentItem = document.getElementById(`${id}`);
+                studentItem.querySelector('.student-item-name').innerText =
+                    name;
                 break;
             }
 
@@ -155,11 +161,10 @@ export default class StudentItemView {
                 this.#overlay.style.display = 'none';
                 this.#formUpdate.style.display = 'none';
                 element.remove();
-                window.location.reload();
+                checkEmptyStudent();
                 break;
             }
             default:
-                alert(respone.message);
                 break;
         }
         return respone;
@@ -182,20 +187,15 @@ export default class StudentItemView {
 
     async #handleViewProfile(id) {
         const respone = await loading(() => this.#controler.getProfile(id));
-        const { isError, message, data } = respone;
-        if (isError) {
-            alert(message);
+        const { type, data } = respone;
+        if (type === TYPE.ERROR) {
             return respone;
         }
-        const length = Object.keys(data).length;
-        if (length) {
-            this.#handleActionOverlay('block', 'block');
-            this.#addDataFormUpdate(data);
-            this.#addEventIconUpdate();
-            this.#addEventButtonUpdate(data.id);
-            this.#addEventButtonDelete(data.id);
-            return respone;
-        }
+        this.#handleActionOverlay('block', 'block');
+        this.#addDataFormUpdate(data);
+        this.#addEventIconUpdate();
+        this.#addEventButtonUpdate(data.id);
+        this.#addEventButtonDelete(data.id);
         return respone;
     }
 }

@@ -16,27 +16,21 @@ export default class Controller {
      */
     async getStudents() {
         try {
-            const data = (
-                await sendRequest({
-                    method: 'GET',
-                    endpoint: '/students',
-                })
-            ).data.map((item) => ({
+            const response = await sendRequest({
+                method: 'GET',
+                endpoint: '/students',
+            });
+            const data = response.data.map((item) => ({
                 id: item.id,
                 name: item.name,
                 image: item.image,
             }));
             return {
-                isError: false,
-                message: MESSAGE.GET_SUCCESS,
+                ...response,
                 data,
             };
         } catch (error) {
-            return {
-                isError: true,
-                message: MESSAGE.GET_FAIL,
-                data: [],
-            };
+            throw new Error(error);
         }
     }
 
@@ -60,39 +54,33 @@ export default class Controller {
         try {
             const emptyField = await this.#handleValidate(student);
             const emptyFieldLength = Object.keys(emptyField).length;
-            const respone = emptyFieldLength
-                ? {
-                      type: TYPE.REQUIRE,
-                      emptyField,
-                  }
-                : await (async () => {
-                      const data = (
-                          await sendRequest({
-                              method: 'POST',
-                              endpoint: '/students',
-                              data: student,
-                          })
-                      ).data;
-                      const dataLength = Object.keys(data).length;
-                      return dataLength
-                          ? {
-                                type: TYPE.SUCCESS,
-                                message: MESSAGE.ADD_SUCCESS,
-                                student: {
-                                    id: data.id,
-                                    name: data.name,
-                                    image: data.image,
-                                },
-                            }
-                          : {};
-                  })();
-
-            return respone;
-        } catch (error) {
+            if (emptyFieldLength) {
+                return {
+                    type: TYPE.REQUIRE,
+                    emptyField,
+                };
+            }
+            const response = await sendRequest({
+                method: 'POST',
+                endpoint: '/students',
+                data: student,
+            });
+            const data = response.data;
+            const dataLength = Object.keys(data).length;
+            let studentTemp = {};
+            if (dataLength) {
+                studentTemp = {
+                    id: data.id,
+                    name: data.name,
+                    image: data.image,
+                };
+            }
             return {
-                type: TYPE.ERROR,
-                message: MESSAGE.ADD_FAIL,
+                ...response,
+                student: studentTemp,
             };
+        } catch (error) {
+            throw new Error(error);
         }
     }
 
@@ -103,23 +91,17 @@ export default class Controller {
      */
     async getProfile(id) {
         try {
-            const data = (
-                await sendRequest({
-                    method: 'GET',
-                    endpoint: '/students/' + id,
-                })
-            ).data;
+            const response = await sendRequest({
+                method: 'GET',
+                endpoint: '/students/' + id,
+            });
+            const data = response.data;
             return {
-                isError: false,
-                message: MESSAGE.GET_SUCCESS,
+                ...response,
                 data,
             };
         } catch (error) {
-            return {
-                isError: true,
-                message: MESSAGE.GET_FAIL,
-                data: {},
-            };
+            throw new Error(error);
         }
     }
 
@@ -136,34 +118,21 @@ export default class Controller {
                 id
             );
             const isValid = Object.keys(emptyField).length;
-            const respone = isValid
-                ? {
-                      type: TYPE.REQUIRE,
-                      message: '',
-                      emptyField,
-                  }
-                : await (async () => {
-                      const data = await sendRequest({
-                          method: 'PUT',
-                          endpoint: '/students/' + id,
-                          data: student.getStudent(),
-                      });
-                      return data.type === TYPE.SUCCESS
-                          ? {
-                                type: TYPE.SUCCESS,
-                                message: MESSAGE.UPDATE_SUCCESS,
-                                emptyField,
-                            }
-                          : {};
-                  })();
-
-            return respone;
+            if (isValid) {
+                return {
+                    type: TYPE.REQUIRE,
+                    message: '',
+                    emptyField,
+                };
+            }
+            const response = await sendRequest({
+                method: 'PUT',
+                endpoint: '/students/' + id,
+                data: student.getStudent(),
+            });
+            return response;
         } catch (error) {
-            return {
-                type: TYPE.ERROR,
-                message: MESSAGE.UPDATE_FAIL,
-                emptyField,
-            };
+            throw new Error(error);
         }
     }
 
@@ -174,19 +143,13 @@ export default class Controller {
      */
     async handleDeleteStudent(id) {
         try {
-            await sendRequest({
+            const response = await sendRequest({
                 method: 'DELETE',
                 endpoint: '/students/' + id,
             });
-            return {
-                type: TYPE.SUCCESS,
-                message: MESSAGE.DEL_SUCCESS,
-            };
+            return response;
         } catch (error) {
-            return {
-                type: TYPE.ERROR,
-                message: MESSAGE.DEL_FAIL,
-            };
+            throw new Error(error);
         }
     }
 }

@@ -1,10 +1,10 @@
 {
     "students": [
         {
-            "code": "12112",
-            "name": "develop",
+            "code": "12312",
+            "name": "feature j duong",
             "gender": "male",
-            "dateOfBirth": "2022-11-29",
+            "dateOfBirth": "2022-11-17",
             "classCode": "19-0101",
             "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFIjfHSc0yfN71WXEzJBNJOH-cs1GvoVSYOg&usqp=CAU",
             "id": 1

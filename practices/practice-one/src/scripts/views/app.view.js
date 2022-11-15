@@ -2,7 +2,7 @@ import { querySelector } from '../helpers/index.js';
 import Controller from '../controllers/student.controller';
 import StudentItemView from './student-item.view.js';
 import FillterView from './fillter.view.js';
-import { loading } from '../helpers/dom.js';
+import { loading, checkEmptyStudent } from '../helpers/dom.js';
 
 export default class App {
     #ulElement;
@@ -35,18 +35,12 @@ export default class App {
     }
 
     async render(respone) {
-        respone.isError
-            ? alert(respone.message)
-            : (() => {
-                  this.#messageEl.style.display = !respone.data.length
-                      ? 'block'
-                      : 'none';
-                  this.#ulElement.innerHTML = '';
-                  respone.data.forEach(({ id, name, image }) => {
-                      const sudentItem = new StudentItemView(id, name, image);
-                      this.#ulElement.appendChild(sudentItem.createElement());
-                  });
-              })();
+        this.#ulElement.innerHTML = '';
+        respone.data.forEach(({ id, name, image }) => {
+            const sudentItem = new StudentItemView(id, name, image);
+            this.#ulElement.appendChild(sudentItem.createElement());
+        });
+        checkEmptyStudent();
     }
 
     // add event close icon form update

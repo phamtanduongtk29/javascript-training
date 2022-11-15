@@ -167,7 +167,6 @@ export default class FillterView {
                 break;
             }
             default: {
-                alert(respone.message);
                 break;
             }
         }

@@ -22,17 +22,30 @@ export async function sendRequest({ method, endpoint, data, headers }) {
             baseURL: process.env.URL + endpoint,
             data: data,
             headers,
-        });
-        return {
-            type: TYPES.SUCCESS,
-            message: 'Call ' + method + ' request success',
-            data: respone,
-        };
+        })
+            .then((response) => {
+                return {
+                    type: TYPES.SUCCESS,
+                    message: 'Call ' + method + ' request success ',
+                    data: response.data,
+                    status: response.status,
+                };
+            })
+            .catch((error) => {
+                if (error.response) {
+                    return {
+                        type: TYPES.ERROR,
+                        message: 'Call ' + method + ' ' + error.message,
+                        data: [],
+                        status: error.response.status,
+                    };
+                } else if (error.request) {
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                }
+            });
+        return respone;
     } catch (error) {
-        return {
-            type: TYPES.ERROR,
-            message: 'Can not call ' + method + ' request',
-            data: {},
-        };
+        throw new Error(error.message);
     }
 }
